@@ -1,0 +1,23 @@
+{
+  "name": "modohana-info-server",
+  "version": "1.0.0",
+  "description": "모두하나대축제 정보 서버",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "test": "node index.js"
+  },
+  "keywords": [],
+  "author": "김승섭",
+  "license": "ISC",
+  "type": "commonjs",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.10"
+  }
+}

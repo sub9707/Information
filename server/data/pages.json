@@ -1,0 +1,276 @@
+{
+  "site": {
+    "id": "site-root",
+    "title": "사용자 페이지",
+    "route": "/",
+    "description": "일반 사용자를 위한 웹사이트",
+    "screenshot": "https://picsum.photos/seed/site-root/800/600",
+    "children": [
+      {
+        "id": "home",
+        "title": "홈",
+        "route": "/",
+        "description": "메인 랜딩 페이지 - 축제 소개 및 주요 정보",
+        "screenshot": "https://picsum.photos/seed/home/800/600",
+        "features": ["히어로 섹션", "주요 프로그램 소개", "행사 일정", "CTA 버튼"]
+      },
+      {
+        "id": "about",
+        "title": "축제 소개",
+        "route": "/about",
+        "description": "모두하나대축제의 취지와 목표",
+        "screenshot": "https://picsum.photos/seed/about/800/600",
+        "features": ["축제 소개", "개최 목적", "주요 행사"]
+      },
+      {
+        "id": "organization",
+        "title": "기관 소개",
+        "route": "/organization",
+        "description": "주최 및 후원 기관 소개",
+        "screenshot": "https://picsum.photos/seed/organization/800/600",
+        "features": ["주최 기관", "후원 기관", "협력 기관"]
+      },
+      {
+        "id": "online-festival",
+        "title": "온라인 축제",
+        "route": "/online-festival",
+        "description": "온라인으로 참여하는 축제 이벤트",
+        "screenshot": "https://picsum.photos/seed/online-festival/800/600",
+        "features": ["퀴즈 이벤트", "응원 메시지", "글쓰기 이벤트"],
+        "children": [
+          {
+            "id": "online-quiz",
+            "title": "퀴즈 이벤트",
+            "route": "/online-festival/quiz",
+            "description": "퀴즈 참여 페이지",
+            "screenshot": "https://picsum.photos/seed/quiz/800/600",
+            "features": ["퀴즈 문제 풀기", "점수 확인", "경품 추첨"]
+          },
+          {
+            "id": "online-support",
+            "title": "응원 메시지",
+            "route": "/online-festival/support",
+            "description": "응원 메시지 작성 및 조회",
+            "screenshot": "https://picsum.photos/seed/support/800/600",
+            "features": ["메시지 작성", "좋아요", "실시간 업데이트"]
+          },
+          {
+            "id": "online-writing",
+            "title": "글쓰기",
+            "route": "/online-festival/writing",
+            "description": "주제별 글쓰기 이벤트",
+            "screenshot": "https://picsum.photos/seed/writing/800/600",
+            "features": ["글 작성", "추천 글", "좋아요 기능"]
+          }
+        ]
+      },
+      {
+        "id": "programs",
+        "title": "행사 프로그램",
+        "route": "/programs",
+        "description": "축제 프로그램 일정 및 안내",
+        "screenshot": "https://picsum.photos/seed/programs/800/600",
+        "features": ["프로그램 목록", "일정 안내", "장소 정보"],
+        "children": [
+          {
+            "id": "program-detail",
+            "title": "프로그램 상세",
+            "route": "/programs/:id",
+            "description": "개별 프로그램 상세 정보",
+            "screenshot": "https://picsum.photos/seed/program-detail/800/600",
+            "features": ["상세 설명", "일정", "참가 방법"]
+          }
+        ]
+      },
+      {
+        "id": "news",
+        "title": "공지/소식",
+        "route": "/news",
+        "description": "축제 소식 및 공지사항",
+        "screenshot": "https://picsum.photos/seed/news/800/600",
+        "features": ["공지사항 목록", "카테고리 필터", "검색 기능"],
+        "children": [
+          {
+            "id": "news-detail",
+            "title": "소식 상세",
+            "route": "/news/:id",
+            "description": "개별 소식 상세 페이지",
+            "screenshot": "https://picsum.photos/seed/news-detail/800/600",
+            "features": ["본문 내용", "첨부파일", "조회수"]
+          }
+        ]
+      },
+      {
+        "id": "directions",
+        "title": "오시는 길",
+        "route": "/directions",
+        "description": "축제 장소 및 교통 안내",
+        "screenshot": "https://picsum.photos/seed/directions/800/600",
+        "features": ["지도", "대중교통", "주차 안내"]
+      },
+      {
+        "id": "partners",
+        "title": "함께하는 기관",
+        "route": "/partners",
+        "description": "후원 및 협력 기관 소개",
+        "screenshot": "https://picsum.photos/seed/partners/800/600",
+        "features": ["후원 기관 목록", "로고", "상세 정보"]
+      },
+      {
+        "id": "registration",
+        "title": "사전참가 신청",
+        "route": "/registration",
+        "description": "사전 참가 신청 페이지",
+        "screenshot": "https://picsum.photos/seed/registration/800/600",
+        "features": ["신청 폼", "참가 유형 선택", "프로그램 선택"],
+        "children": [
+          {
+            "id": "registration-success",
+            "title": "신청 완료",
+            "route": "/registration/success",
+            "description": "신청 완료 확인 페이지",
+            "screenshot": "https://picsum.photos/seed/reg-success/800/600",
+            "features": ["신청번호", "신청 내역", "확인증 다운로드"]
+          }
+        ]
+      },
+      {
+        "id": "login",
+        "title": "로그인",
+        "route": "/login",
+        "description": "로그인 및 회원가입",
+        "screenshot": "https://picsum.photos/seed/login/800/600",
+        "features": ["전화번호 로그인", "소셜 로그인", "회원가입"]
+      },
+      {
+        "id": "my-page",
+        "title": "마이페이지",
+        "route": "/my-page",
+        "description": "사용자 정보 관리",
+        "screenshot": "https://picsum.photos/seed/mypage/800/600",
+        "features": ["내 정보", "신청 내역", "참여 이벤트"],
+        "children": [
+          {
+            "id": "my-registrations",
+            "title": "내 신청 내역",
+            "route": "/my-page/registrations",
+            "description": "사전참가 신청 내역 조회",
+            "screenshot": "https://picsum.photos/seed/my-reg/800/600",
+            "features": ["신청 목록", "상태 확인", "취소 기능"]
+          },
+          {
+            "id": "delete-account",
+            "title": "회원탈퇴",
+            "route": "/my-page/delete-account",
+            "description": "회원 탈퇴 페이지",
+            "screenshot": "https://picsum.photos/seed/delete/800/600",
+            "features": ["탈퇴 사유", "확인 절차", "데이터 삭제"]
+          }
+        ]
+      }
+    ]
+  },
+  "dashboard": {
+    "id": "dashboard-root",
+    "title": "관리자 페이지",
+    "route": "/admin",
+    "description": "관리자 대시보드 및 관리 기능",
+    "screenshot": "https://picsum.photos/seed/admin-root/800/600",
+    "children": [
+      {
+        "id": "admin-dashboard",
+        "title": "대시보드",
+        "route": "/admin/dashboard",
+        "description": "GA4 통계 및 전체 현황",
+        "screenshot": "https://picsum.photos/seed/admin-dash/800/600",
+        "features": ["방문자 통계", "페이지뷰", "실시간 현황", "차트"]
+      },
+      {
+        "id": "admin-registrations",
+        "title": "사전접수 관리",
+        "route": "/admin/registrations",
+        "description": "사전접수 신청 관리 및 통계",
+        "screenshot": "https://picsum.photos/seed/admin-reg/800/600",
+        "features": ["신청 목록", "검색/필터", "엑셀 다운로드", "상태 변경"],
+        "children": [
+          {
+            "id": "admin-registration-detail",
+            "title": "신청 상세",
+            "route": "/admin/registrations/:id",
+            "description": "개별 신청 상세 정보",
+            "screenshot": "https://picsum.photos/seed/admin-reg-detail/800/600",
+            "features": ["신청자 정보", "신청 내역", "상태 관리"]
+          }
+        ]
+      },
+      {
+        "id": "admin-news",
+        "title": "소식 관리",
+        "route": "/admin/news",
+        "description": "공지사항 및 소식 관리",
+        "screenshot": "https://picsum.photos/seed/admin-news/800/600",
+        "features": ["목록 조회", "등록/수정/삭제", "중요 공지 설정"],
+        "children": [
+          {
+            "id": "admin-news-create",
+            "title": "소식 등록",
+            "route": "/admin/news/create",
+            "description": "새 소식 등록",
+            "screenshot": "https://picsum.photos/seed/admin-news-create/800/600",
+            "features": ["에디터", "파일 첨부", "미리보기"]
+          },
+          {
+            "id": "admin-news-edit",
+            "title": "소식 수정",
+            "route": "/admin/news/:id/edit",
+            "description": "소식 수정",
+            "screenshot": "https://picsum.photos/seed/admin-news-edit/800/600",
+            "features": ["내용 수정", "파일 관리", "저장"]
+          }
+        ]
+      },
+      {
+        "id": "admin-users",
+        "title": "회원 관리",
+        "route": "/admin/users",
+        "description": "사용자 계정 관리",
+        "screenshot": "https://picsum.photos/seed/admin-users/800/600",
+        "features": ["회원 목록", "검색", "권한 관리", "블랙리스트"],
+        "children": [
+          {
+            "id": "admin-user-detail",
+            "title": "회원 상세",
+            "route": "/admin/users/:id",
+            "description": "개별 회원 상세 정보",
+            "screenshot": "https://picsum.photos/seed/admin-user-detail/800/600",
+            "features": ["회원 정보", "활동 내역", "권한 변경"]
+          }
+        ]
+      },
+      {
+        "id": "admin-quiz",
+        "title": "퀴즈 관리",
+        "route": "/admin/quiz",
+        "description": "퀴즈 이벤트 관리",
+        "screenshot": "https://picsum.photos/seed/admin-quiz/800/600",
+        "features": ["참여자 통계", "문제 관리", "당첨자 관리"]
+      },
+      {
+        "id": "admin-writings",
+        "title": "글쓰기 관리",
+        "route": "/admin/writings",
+        "description": "사용자 글쓰기 관리",
+        "screenshot": "https://picsum.photos/seed/admin-writings/800/600",
+        "features": ["글 목록", "추천 설정", "삭제"]
+      },
+      {
+        "id": "admin-support",
+        "title": "응원메시지 관리",
+        "route": "/admin/support",
+        "description": "응원 메시지 관리",
+        "screenshot": "https://picsum.photos/seed/admin-support/800/600",
+        "features": ["메시지 목록", "부적절 메시지 삭제"]
+      }
+    ]
+  }
+}

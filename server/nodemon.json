@@ -1,0 +1,15 @@
+{
+  "watch": [
+    "index.js",
+    "data/"
+  ],
+  "ext": "js,json",
+  "ignore": [
+    "node_modules/"
+  ],
+  "exec": "node index.js",
+  "env": {
+    "NODE_ENV": "development"
+  },
+  "delay": "1000"
+}

@@ -1,0 +1,177 @@
+.page-node {
+  position: relative;
+  padding: 1rem 1.5rem;
+  background-color: var(--color-bg);
+  border: 2px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  min-width: 200px;
+  cursor: pointer;
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
+}
+
+.page-node:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-lg);
+  border-color: var(--color-primary-hover);
+  z-index: 10;
+}
+
+.page-node-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.page-node-title {
+  font-weight: 600;
+  font-size: 0.9375rem;
+  color: var(--color-text);
+  text-align: center;
+}
+
+.page-node-route {
+  font-size: 0.75rem;
+  color: var(--color-text-secondary);
+  text-align: center;
+  font-family: 'Courier New', monospace;
+}
+
+/* Portal로 렌더링되는 툴팁 */
+.page-node-tooltip-portal {
+  position: fixed; /* absolute에서 fixed로 변경 */
+  transform: translateX(-50%);
+  width: 320px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  z-index: 9500; /* 높은 z-index */
+  padding: 1.5rem;
+  animation: tooltipFadeIn 0.2s ease-out;
+  pointer-events: none; /* 마우스 이벤트 무시 */
+}
+
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(-50%) translateY(0);
+  }
+}
+
+.page-node-tooltip-portal::before {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 8px solid transparent;
+  border-bottom-color: var(--color-border);
+}
+
+.page-node-tooltip-portal::after {
+  content: '';
+  position: absolute;
+  bottom: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  border: 7px solid transparent;
+  border-bottom-color: var(--color-bg);
+  margin-bottom: -1px;
+}
+
+.tooltip-header {
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--color-border-light);
+}
+
+.tooltip-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.25rem;
+}
+
+.tooltip-route {
+  font-size: 0.75rem;
+  color: var(--color-primary);
+  font-family: 'Courier New', monospace;
+  font-weight: 500;
+}
+
+.tooltip-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin-bottom: 0.75rem;
+}
+
+.tooltip-features {
+  margin-bottom: 0.75rem;
+}
+
+.tooltip-features-title {
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 0.5rem;
+}
+
+.tooltip-features-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.tooltip-features-list li {
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  padding-left: 1rem;
+  position: relative;
+}
+
+.tooltip-features-list li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--color-primary);
+}
+
+.tooltip-screenshot {
+  margin-bottom: 0.75rem;
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  border: 1px solid var(--color-border-light);
+}
+
+.tooltip-screenshot img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+.tooltip-footer {
+  text-align: center;
+  font-size: 0.75rem;
+  color: var(--color-text-tertiary);
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+/* React Flow Handle 스타일 */
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-bg);
+}
+
+.react-flow__handle:hover {
+  background-color: var(--color-primary-hover);
+}

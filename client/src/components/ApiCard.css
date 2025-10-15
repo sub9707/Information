@@ -1,0 +1,104 @@
+.api-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  padding: 1.25rem;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-top: 3px solid var(--color-primary);
+  border-radius: var(--radius-md);
+  text-align: left;
+  transition: all var(--transition-base);
+  cursor: pointer;
+  position: relative;
+}
+
+.api-card:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+  border-color: var(--color-border);
+}
+
+.api-card:active {
+  transform: translateY(0);
+}
+
+.api-card-header {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.api-method {
+  padding: 0.25rem 0.625rem;
+  border-radius: var(--radius-sm);
+  font-weight: 600;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.api-name {
+  flex: 1;
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin: 0;
+}
+
+.api-endpoint {
+  display: block;
+  padding: 0.5rem 0.75rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: 0.8125rem;
+  color: var(--color-text-secondary);
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.api-card-description {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  margin: 0;
+  flex: 1;
+}
+
+.api-card-footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding-top: 0.75rem;
+  border-top: 1px solid var(--color-border-light);
+}
+
+.api-tag {
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--radius-sm);
+  font-size: 0.6875rem;
+  font-weight: 500;
+}
+
+.api-tag-auth {
+  background-color: var(--color-primary-light);
+  color: var(--color-primary);
+}
+
+.api-tag-admin {
+  background-color: #fee2e2;
+  color: #991b1b;
+}
+
+.api-card-arrow {
+  margin-left: auto;
+  color: var(--color-text-tertiary);
+  font-size: 1.25rem;
+  transition: transform var(--transition-fast);
+}
+
+.api-card:hover .api-card-arrow {
+  transform: translateX(4px);
+  color: var(--color-primary);
+}
