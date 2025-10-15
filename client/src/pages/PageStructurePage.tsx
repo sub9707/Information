@@ -32,55 +32,129 @@ const PageStructurePage: React.FC = () => {
   const createNodesAndEdges = useCallback((data: PageNode, type: 'site' | 'dashboard') => {
     const nodes: Node[] = []
     const edges: Edge[] = []
-    let nodeId = 0
-    let yOffset = 0
+    const nodeToIdMap = new Map<PageNode, string>()
+    let nodeIdCounter = 0
 
-    const processNode = (node: PageNode, parentId: string | null, level: number, xOffset: number) => {
-      const id = `${type}-${nodeId++}`
-      const x = xOffset
-      const y = yOffset
+    // 레이아웃 설정
+    const VERTICAL_SPACING = 180
+    const HORIZONTAL_SPACING = 280
+    const START_Y = 50
+
+    // 각 노드의 서브트리 너비 계산
+    const calculateSubtreeWidth = (node: PageNode): number => {
+      if (!node.children || node.children.length === 0) {
+        return 1
+      }
+
+      return node.children.reduce((sum, child) => {
+        return sum + calculateSubtreeWidth(child)
+      }, 0)
+    }
+
+    // DFS로 노드 배치 (부모 중심)
+    const layoutNodes = (
+      node: PageNode,
+      parentNode: PageNode | null,
+      level: number,
+      leftBound: number
+    ): number => {
+      const id = `${type}-${nodeIdCounter++}`
+      nodeToIdMap.set(node, id)
+
+      const y = START_Y + (level * VERTICAL_SPACING)
+
+      // 자식이 없으면 현재 위치에 배치
+      if (!node.children || node.children.length === 0) {
+        const x = leftBound * HORIZONTAL_SPACING
+
+        nodes.push({
+          id,
+          type: 'pageNode',
+          position: { x, y },
+          data: {
+            label: node.title,
+            ...node,
+          },
+        })
+
+        // 부모와 연결
+        if (parentNode) {
+          const parentId = nodeToIdMap.get(parentNode)
+          if (parentId) {
+            edges.push({
+              id: `edge-${parentId}-${id}`,
+              source: parentId,
+              target: id,
+              type: 'smoothstep',
+              animated: true,
+              markerEnd: {
+                type: MarkerType.ArrowClosed,
+                color: '#f97316',
+              },
+              style: {
+                stroke: '#f97316',
+                strokeWidth: 2,
+              },
+            })
+          }
+        }
+
+        return leftBound + 1
+      }
+
+      // 자식들의 위치를 먼저 계산
+      let currentLeft = leftBound
+      const childPositions: number[] = []
+
+      node.children.forEach(child => {
+        const childWidth = calculateSubtreeWidth(child)
+        const childCenter = currentLeft + (childWidth - 1) / 2
+        childPositions.push(childCenter)
+        currentLeft = layoutNodes(child, node, level + 1, currentLeft)
+      })
+
+      // 부모는 자식들의 중간에 배치
+      const parentX = (childPositions[0] + childPositions[childPositions.length - 1]) / 2 * HORIZONTAL_SPACING
 
       nodes.push({
         id,
         type: 'pageNode',
-        position: { x, y },
+        position: { x: parentX, y },
         data: {
           label: node.title,
           ...node,
         },
       })
 
-      if (parentId) {
-        edges.push({
-          id: `edge-${parentId}-${id}`,
-          source: parentId,
-          target: id,
-          type: 'smoothstep',
-          animated: true,
-          markerEnd: {
-            type: MarkerType.ArrowClosed,
-            color: '#f97316',
-          },
-          style: {
-            stroke: '#f97316',
-            strokeWidth: 2,
-          },
-        })
+      // 부모와 연결
+      if (parentNode) {
+        const parentId = nodeToIdMap.get(parentNode)
+        if (parentId) {
+          edges.push({
+            id: `edge-${parentId}-${id}`,
+            source: parentId,
+            target: id,
+            type: 'smoothstep',
+            animated: true,
+            markerEnd: {
+              type: MarkerType.ArrowClosed,
+              color: '#f97316',
+            },
+            style: {
+              stroke: '#f97316',
+              strokeWidth: 2,
+            },
+          })
+        }
       }
 
-      yOffset += 200
-
-      if (node.children && node.children.length > 0) {
-        let childXOffset = xOffset - ((node.children.length - 1) * 350) / 2
-
-        node.children.forEach((child) => {
-          processNode(child, id, level + 1, childXOffset)
-          childXOffset += 350
-        })
-      }
+      return currentLeft
     }
 
-    processNode(data, null, 0, 400)
+    // 레이아웃 시작
+    const totalWidth = calculateSubtreeWidth(data)
+    const startLeft = -totalWidth / 2
+    layoutNodes(data, null, 0, startLeft)
 
     return { nodes, edges }
   }, [])
@@ -88,12 +162,11 @@ const PageStructurePage: React.FC = () => {
   // React Flow 인스턴스 초기화
   const onInit = useCallback((instance: ReactFlowInstance) => {
     reactFlowInstanceRef.current = instance
-    // 초기 줌 레벨 설정
     setTimeout(() => {
-      instance.fitView({ 
+      instance.fitView({
         padding: 0.2,
-        minZoom: 0.7,
-        maxZoom: 0.9,
+        minZoom: 0.5,
+        maxZoom: 1.5,
         duration: 400
       })
     }, 50)
@@ -130,15 +203,15 @@ const PageStructurePage: React.FC = () => {
   useEffect(() => {
     if (nodes.length > 0 && reactFlowInstanceRef.current) {
       setTimeout(() => {
-        reactFlowInstanceRef.current?.fitView({ 
+        reactFlowInstanceRef.current?.fitView({
           padding: 0.2,
-          minZoom: 0.7,
-          maxZoom: 0.9,
+          minZoom: 0.5,
+          maxZoom: 1.5,
           duration: 400
         })
       }, 50)
     }
-  }, [nodes.length]) // nodes.length만 의존
+  }, [nodes.length])
 
   if (loading) {
     return (

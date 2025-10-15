@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
 import { createPortal } from 'react-dom'
 import { Handle, Position } from 'reactflow'
 import { PageNode as PageNodeType } from '@/types'
@@ -11,17 +11,45 @@ interface PageNodeProps {
 const PageNode: React.FC<PageNodeProps> = ({ data }) => {
   const [showTooltip, setShowTooltip] = useState(false)
   const [nodeRef, setNodeRef] = useState<HTMLDivElement | null>(null)
-  const [tooltipPosition, setTooltipPosition] = useState({ top: 0, left: 0 })
+  const [tooltipPosition, setTooltipPosition] = useState<{ top: number; left: number } | null>(null)
+  const [imageLoaded, setImageLoaded] = useState(false)
+  const [isPositioned, setIsPositioned] = useState(false) // 위치 계산 완료 여부
 
-  const handleMouseEnter = (e: React.MouseEvent<HTMLDivElement>) => {
+  useEffect(() => {
+    if (nodeRef && showTooltip) {
+      const rect = nodeRef.getBoundingClientRect()
+      setTooltipPosition({
+        top: rect.top + rect.height / 2,
+        left: rect.right + 20,
+      })
+      // 위치 계산 완료
+      setIsPositioned(true)
+    }
+  }, [nodeRef, showTooltip])
+
+  const handleMouseEnter = () => {
+    setShowTooltip(true)
+    setImageLoaded(false)
+    setIsPositioned(false) // 초기화
+    
     if (nodeRef) {
       const rect = nodeRef.getBoundingClientRect()
       setTooltipPosition({
-        top: rect.bottom + 16, // 노드 하단 + 여백
-        left: rect.left + rect.width / 2, // 노드 중앙
+        top: rect.top + rect.height / 2,
+        left: rect.right + 20,
+      })
+      // 다음 프레임에 위치 확정
+      requestAnimationFrame(() => {
+        setIsPositioned(true)
       })
     }
-    setShowTooltip(true)
+  }
+
+  const handleMouseLeave = () => {
+    setShowTooltip(false)
+    setImageLoaded(false)
+    setTooltipPosition(null)
+    setIsPositioned(false)
   }
 
   const handleClick = () => {
@@ -37,7 +65,7 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
         ref={setNodeRef}
         className="page-node"
         onMouseEnter={handleMouseEnter}
-        onMouseLeave={() => setShowTooltip(false)}
+        onMouseLeave={handleMouseLeave}
         onClick={handleClick}
       >
         <div className="page-node-content">
@@ -47,9 +75,9 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
       </div>
       <Handle type="source" position={Position.Bottom} />
 
-      {showTooltip && createPortal(
+      {showTooltip && tooltipPosition && createPortal(
         <div 
-          className="page-node-tooltip-portal"
+          className={`page-node-tooltip-portal ${isPositioned ? 'positioned' : ''}`}
           style={{
             top: `${tooltipPosition.top}px`,
             left: `${tooltipPosition.left}px`,
@@ -59,24 +87,40 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
             <h4 className="tooltip-title">{data.title}</h4>
             <span className="tooltip-route">{data.route}</span>
           </div>
-          <p className="tooltip-description">{data.description}</p>
-          {data.features && data.features.length > 0 && (
-            <div className="tooltip-features">
-              <h5 className="tooltip-features-title">주요 기능</h5>
-              <ul className="tooltip-features-list">
-                {data.features.slice(0, 4).map((feature, index) => (
-                  <li key={index}>{feature}</li>
-                ))}
-              </ul>
+
+          <div className="tooltip-body">
+            <div className="tooltip-screenshot">
+              {!imageLoaded && (
+                <div className="screenshot-skeleton">
+                  <div className="skeleton-shimmer"></div>
+                </div>
+              )}
+              
+              <img
+                src={data.screenshot}
+                alt={data.title}
+                className={`screenshot-image ${imageLoaded ? 'loaded' : ''}`}
+                onLoad={() => setImageLoaded(true)}
+                onError={() => setImageLoaded(true)}
+              />
             </div>
-          )}
-          <div className="tooltip-screenshot">
-            <img
-              src={data.screenshot}
-              alt={data.title}
-              loading="lazy"
-            />
+
+            <div className="tooltip-content">
+              <p className="tooltip-description">{data.description}</p>
+              
+              {data.features && data.features.length > 0 && (
+                <div className="tooltip-features">
+                  <h5 className="tooltip-features-title">주요 기능</h5>
+                  <ul className="tooltip-features-list">
+                    {data.features.map((feature, index) => (
+                      <li key={index}>{feature}</li>
+                    ))}
+                  </ul>
+                </div>
+              )}
+            </div>
           </div>
+
           <div className="tooltip-footer">
             클릭하여 사이트로 이동
           </div>
