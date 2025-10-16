@@ -226,13 +226,6 @@ app.get('/api/stats', (req, res) => {
   }
 });
 
-// React 앱 서빙 (프로덕션)
-if (process.env.NODE_ENV === 'production') {
-  app.get('*', (req, res) => {
-    res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
-  });
-}
-
 // 404 에러 핸들러 (모든 라우트 마지막에 위치)
 app.use((req, res, next) => {
   // API 요청인 경우
