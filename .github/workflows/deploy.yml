@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: self-hosted  # 라즈베리파이에서 실행
+    runs-on: self-hosted
     
     steps:
       - name: Checkout code
@@ -35,18 +35,39 @@ jobs:
 
       - name: Deploy to production directory
         run: |
-          # 프로덕션 디렉토리로 파일 복사
-          sudo mkdir -p /home/sub/app/modohana-api
+          # 프로덕션 디렉토리 생성
+          sudo mkdir -p /home/sub/app/modohana-api/client
+          sudo mkdir -p /home/sub/app/modohana-api/logs
+          
+          # 기존 파일 삭제
+          sudo rm -rf /home/sub/app/modohana-api/client/dist
+          sudo rm -rf /home/sub/app/modohana-api/server
+          
+          # 파일 복사
           sudo cp -r client/dist /home/sub/app/modohana-api/client/
           sudo cp -r server /home/sub/app/modohana-api/
           sudo cp ecosystem.config.js /home/sub/app/modohana-api/
           sudo cp package.json /home/sub/app/modohana-api/
+          
+          # 소유권 변경
           sudo chown -R sub:sub /home/sub/app/modohana-api
+          
+          # 파일 확인
+          echo "📂 배포된 파일 확인:"
+          ls -la /home/sub/app/modohana-api/client/dist/ | head -10
 
       - name: Install server dependencies
         run: |
           cd /home/sub/app/modohana-api/server
           npm ci --production
+
+      - name: Ensure serve is installed
+        run: |
+          if ! command -v serve &> /dev/null; then
+            echo "📦 serve 설치 중..."
+            sudo npm install -g serve
+          fi
+          serve --version
 
       - name: Restart services with PM2
         run: |
@@ -57,18 +78,57 @@ jobs:
           export PORT=5000
           export CLIENT_URL=http://subdevpi.mywire.org:4000
           
-          # PM2로 재시작
-          pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
+          # 기존 프로세스 중지 및 삭제
+          pm2 delete modohana-server || true
+          pm2 delete modohana-client || true
+          
+          # PM2로 시작
+          pm2 start ecosystem.config.js --env production
           pm2 save
+          
+          # 상태 확인
+          echo "📊 PM2 상태:"
+          pm2 list
+
+      - name: Wait for services
+        run: |
+          echo "⏳ 서비스 시작 대기 (10초)..."
+          sleep 10
 
       - name: Health check
         run: |
-          sleep 5
-          curl -f http://localhost:5000/api/health || exit 1
-          curl -f http://localhost:4000 || exit 1
+          echo "🔍 서버 헬스 체크..."
+          if curl -f http://localhost:5000/api/health; then
+            echo "✅ 서버 정상"
+          else
+            echo "❌ 서버 헬스 체크 실패"
+            pm2 logs modohana-server --lines 20 --nostream
+            exit 1
+          fi
+          
+          echo ""
+          echo "🔍 클라이언트 헬스 체크..."
+          HTTP_CODE=$(curl -s -o /dev/null -w "%{http_code}" http://localhost:4000)
+          
+          if [ "$HTTP_CODE" -eq 200 ] || [ "$HTTP_CODE" -eq 304 ]; then
+            echo "✅ 클라이언트 정상 (HTTP $HTTP_CODE)"
+          else
+            echo "❌ 클라이언트 응답 코드: HTTP $HTTP_CODE"
+            echo "📋 PM2 상태:"
+            pm2 list
+            echo "📋 클라이언트 로그:"
+            pm2 logs modohana-client --lines 30 --nostream
+            echo "📋 파일 확인:"
+            ls -la /home/sub/app/modohana-api/client/dist/
+            exit 1
+          fi
 
       - name: Deployment complete
         run: |
+          echo ""
           echo "✅ 배포 완료!"
           echo "🌐 클라이언트: http://subdevpi.mywire.org:4000"
           echo "🔌 서버: http://subdevpi.mywire.org:5000"
+          echo ""
+          echo "📊 최종 PM2 상태:"
+          pm2 list
