@@ -1,4 +1,4 @@
-name: Deploy to Raspberry Pi
+name: Deploy to Raspberry Pi (Self-hosted)
 
 on:
   push:
@@ -9,7 +9,7 @@ on:
 
 jobs:
   deploy:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted  # 라즈베리파이에서 실행
     
     steps:
       - name: Checkout code
@@ -21,14 +21,11 @@ jobs:
           node-version: '20'
           cache: 'npm'
 
-      - name: Install root dependencies
-        run: npm ci
-
-      - name: Install client dependencies
-        run: cd client && npm ci
-
-      - name: Install server dependencies
-        run: cd server && npm ci
+      - name: Install dependencies
+        run: |
+          npm ci
+          cd client && npm ci
+          cd ../server && npm ci
 
       - name: Build client
         run: cd client && npm run build
@@ -36,41 +33,42 @@ jobs:
           NODE_ENV: production
           VITE_API_URL: http://subdevpi.mywire.org:5000
 
-      - name: Deploy to Raspberry Pi
-        uses: appleboy/scp-action@v0.1.7
-        with:
-          host: ${{ secrets.RPI_HOST }}
-          username: ${{ secrets.RPI_USERNAME }}
-          key: ${{ secrets.RPI_SSH_KEY }}
-          port: ${{ secrets.RPI_PORT || 22 }}
-          source: "client/dist,server,package.json"
-          target: "/home/${{ secrets.RPI_USERNAME }}/modohana-info"
-          strip_components: 0
+      - name: Deploy to production directory
+        run: |
+          # 프로덕션 디렉토리로 파일 복사
+          sudo mkdir -p /home/sub/modohana-info
+          sudo cp -r client/dist /home/sub/modohana-info/client/
+          sudo cp -r server /home/sub/modohana-info/
+          sudo cp ecosystem.config.js /home/sub/modohana-info/
+          sudo cp package.json /home/sub/modohana-info/
+          sudo chown -R sub:sub /home/sub/modohana-info
 
-      - name: Restart services on Raspberry Pi
-        uses: appleboy/ssh-action@v1.0.3
-        with:
-          host: ${{ secrets.RPI_HOST }}
-          username: ${{ secrets.RPI_USERNAME }}
-          key: ${{ secrets.RPI_SSH_KEY }}
-          port: ${{ secrets.RPI_PORT || 22 }}
-          script: |
-            cd /home/${{ secrets.RPI_USERNAME }}/modohana-info
-            
-            # 환경 변수 설정
-            export NODE_ENV=production
-            export PORT=5000
-            export CLIENT_URL=http://subdevpi.mywire.org:4000
-            
-            # 서버 의존성 설치 (혹시 모를 변경사항)
-            cd server && npm ci --production
-            
-            # PM2로 재시작
-            pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
-            pm2 save
+      - name: Install server dependencies
+        run: |
+          cd /home/sub/modohana-info/server
+          npm ci --production
+
+      - name: Restart services with PM2
+        run: |
+          cd /home/sub/modohana-info
+          
+          # 환경 변수 설정
+          export NODE_ENV=production
+          export PORT=5000
+          export CLIENT_URL=http://subdevpi.mywire.org:4000
+          
+          # PM2로 재시작
+          pm2 reload ecosystem.config.js --env production || pm2 start ecosystem.config.js --env production
+          pm2 save
 
       - name: Health check
         run: |
-          sleep 10
-          curl -f http://subdevpi.mywire.org:5000/api/health || exit 1
-          curl -f http://subdevpi.mywire.org:4000 || exit 1
+          sleep 5
+          curl -f http://localhost:5000/api/health || exit 1
+          curl -f http://localhost:4000 || exit 1
+
+      - name: Deployment complete
+        run: |
+          echo "✅ 배포 완료!"
+          echo "🌐 클라이언트: http://subdevpi.mywire.org:4000"
+          echo "🔌 서버: http://subdevpi.mywire.org:5000"
