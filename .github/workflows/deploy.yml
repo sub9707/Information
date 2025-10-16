@@ -36,21 +36,21 @@ jobs:
       - name: Deploy to production directory
         run: |
           # 프로덕션 디렉토리로 파일 복사
-          sudo mkdir -p /home/sub/modohana-info
-          sudo cp -r client/dist /home/sub/modohana-info/client/
-          sudo cp -r server /home/sub/modohana-info/
-          sudo cp ecosystem.config.js /home/sub/modohana-info/
-          sudo cp package.json /home/sub/modohana-info/
-          sudo chown -R sub:sub /home/sub/modohana-info
+          sudo mkdir -p /home/sub/app/modohana-api
+          sudo cp -r client/dist /home/sub/app/modohana-api/client/
+          sudo cp -r server /home/sub/app/modohana-api/
+          sudo cp ecosystem.config.js /home/sub/app/modohana-api/
+          sudo cp package.json /home/sub/app/modohana-api/
+          sudo chown -R sub:sub /home/sub/app/modohana-api
 
       - name: Install server dependencies
         run: |
-          cd /home/sub/modohana-info/server
+          cd /home/sub/app/modohana-api/server
           npm ci --production
 
       - name: Restart services with PM2
         run: |
-          cd /home/sub/modohana-info
+          cd /home/sub/app/modohana-api
           
           # 환경 변수 설정
           export NODE_ENV=production
