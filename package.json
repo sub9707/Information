@@ -2,17 +2,41 @@
   "name": "modohana-info",
   "version": "1.0.0",
   "description": "모두하나대축제 프로젝트 정보",
+  "private": true,
   "scripts": {
-    "dev": "concurrently \"npm run server\" \"npm run client\"",
-    "server": "cd server && npm run dev",
-    "client": "cd client && npm start",
-    "build": "cd client && npm run build",
-    "start": "cd server && npm start"
+    "dev": "concurrently \"npm run server:dev\" \"npm run client:dev\"",
+    "server:dev": "cd server && npm run dev",
+    "client:dev": "cd client && npm run dev",
+    "build": "npm run build:client",
+    "build:client": "cd client && npm run build",
+    "preview": "cd client && npm run preview",
+    "start": "pm2 start ecosystem.config.js --env production",
+    "stop": "pm2 stop ecosystem.config.js",
+    "restart": "pm2 restart ecosystem.config.js",
+    "logs": "pm2 logs",
+    "logs:server": "pm2 logs modohana-server",
+    "logs:client": "pm2 logs modohana-client",
+    "status": "pm2 status",
+    "monit": "pm2 monit",
+    "install:all": "npm ci && cd client && npm ci && cd ../server && npm ci",
+    "clean": "rm -rf client/dist server/dist client/node_modules server/node_modules node_modules logs",
+    "deploy:local": "npm run build && npm run start",
+    "health": "curl http://localhost:5000/api/health && curl http://localhost:4000"
   },
-  "keywords": [],
-  "author": "",
+  "keywords": [
+    "react",
+    "react-19",
+    "express",
+    "typescript",
+    "vite"
+  ],
+  "author": "김승섭",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "engines": {
+    "node": ">=20.0.0",
+    "npm": ">=10.0.0"
   }
 }
