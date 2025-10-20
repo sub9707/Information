@@ -81,3 +81,32 @@ export interface ApiResponse<T = any> {
   error?: string
   timestamp?: string
 }
+
+// SQL 테이블 타입
+export interface ColumnInfo {
+  name: string
+  type: string
+  key: string
+}
+
+export interface TableInfo {
+  description: string
+  category: string
+  columns: ColumnInfo[]
+  sampleData: Record<string, any>[]
+  relationships: string[]
+}
+
+export interface TablesData {
+  [tableName: string]: TableInfo
+}
+
+export interface TableNodeData {
+  label: string
+  tableName: string
+  description: string
+  category: string
+  columns: ColumnInfo[]
+  sampleData: Record<string, any>[]
+  relationships: string[]
+}

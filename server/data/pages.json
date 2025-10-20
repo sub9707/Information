@@ -21,7 +21,8 @@
         "features": [
           "축제 소개",
           "개최 목적",
-          "주요 행사"
+          "주요 행사",
+          "네트워크 섹션"
         ]
       },
       {
@@ -95,7 +96,8 @@
         "features": [
           "프로그램 목록",
           "일정 안내",
-          "장소 정보"
+          "장소 정보",
+          "부스 정보"
         ],
         "children": [
           {
@@ -147,7 +149,8 @@
         "features": [
           "지도",
           "대중교통",
-          "주차 안내"
+          "주차 안내",
+          "카카오맵 연동"
         ]
       },
       {
@@ -189,15 +192,46 @@
         ]
       },
       {
-        "id": "login",
-        "title": "로그인",
-        "route": "/login",
-        "description": "로그인 및 회원가입",
-        "screenshot": "https://picsum.photos/seed/login/800/600",
-        "features": [
-          "전화번호 로그인",
-          "소셜 로그인",
-          "회원가입"
+        "id": "auth",
+        "title": "인증",
+        "route": "/auth",
+        "description": "로그인 및 회원가입 관련 페이지",
+        "children": [
+          {
+            "id": "login",
+            "title": "로그인",
+            "route": "/login",
+            "description": "로그인 및 회원가입",
+            "screenshot": "https://picsum.photos/seed/login/800/600",
+            "features": [
+              "전화번호 로그인",
+              "소셜 로그인 (네이버, 카카오)",
+              "회원가입"
+            ]
+          },
+          {
+            "id": "register",
+            "title": "회원가입",
+            "route": "/register",
+            "description": "신규 회원가입",
+            "screenshot": "https://picsum.photos/seed/register/800/600",
+            "features": [
+              "회원정보 입력",
+              "전화번호 인증",
+              "약관 동의"
+            ]
+          },
+          {
+            "id": "forgot-password",
+            "title": "비밀번호 찾기",
+            "route": "/forgot-password",
+            "description": "비밀번호 재설정",
+            "screenshot": "https://picsum.photos/seed/forgot-password/800/600",
+            "features": [
+              "전화번호 인증",
+              "비밀번호 재설정"
+            ]
+          }
         ]
       },
       {
@@ -225,6 +259,30 @@
             ]
           },
           {
+            "id": "change-password",
+            "title": "비밀번호 변경",
+            "route": "/my-page/change-password",
+            "description": "비밀번호 변경 페이지",
+            "screenshot": "https://picsum.photos/seed/change-pw/800/600",
+            "features": [
+              "현재 비밀번호 확인",
+              "새 비밀번호 입력",
+              "비밀번호 변경"
+            ]
+          },
+          {
+            "id": "edit-profile",
+            "title": "회원정보 수정",
+            "route": "/my-page/edit-profile",
+            "description": "회원정보 수정 페이지",
+            "screenshot": "https://picsum.photos/seed/edit-profile/800/600",
+            "features": [
+              "이름, 주소 수정",
+              "프로필 사진 변경",
+              "정보 업데이트"
+            ]
+          },
+          {
             "id": "delete-account",
             "title": "회원탈퇴",
             "route": "/my-page/delete-account",
@@ -234,6 +292,33 @@
               "탈퇴 사유",
               "확인 절차",
               "데이터 삭제"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "error-pages",
+        "title": "에러 페이지",
+        "description": "에러 및 특수 페이지",
+        "children": [
+          {
+            "id": "not-found",
+            "title": "404 페이지",
+            "route": "/not-found",
+            "description": "페이지를 찾을 수 없음",
+            "features": [
+              "404 에러 표시",
+              "홈으로 돌아가기"
+            ]
+          },
+          {
+            "id": "unauthorized",
+            "title": "권한 없음",
+            "route": "/unauthorized",
+            "description": "접근 권한이 없는 페이지",
+            "features": [
+              "권한 오류 표시",
+              "이전 페이지로 돌아가기"
             ]
           }
         ]
@@ -258,6 +343,71 @@
           "페이지뷰",
           "실시간 현황",
           "차트"
+        ]
+      },
+      {
+        "id": "admin-online-festival",
+        "title": "온라인 축제 관리",
+        "route": "/admin/online-festival",
+        "description": "온라인 축제 이벤트 종합 관리",
+        "screenshot": "https://picsum.photos/seed/admin-online/800/600",
+        "features": [
+          "퀴즈 관리",
+          "글쓰기 관리",
+          "응원 메시지 관리",
+          "당첨자 관리"
+        ],
+        "children": [
+          {
+            "id": "admin-quiz",
+            "title": "퀴즈 관리",
+            "route": "/admin/online-festival/quiz",
+            "description": "퀴즈 이벤트 관리",
+            "screenshot": "https://picsum.photos/seed/admin-quiz/800/600",
+            "features": [
+              "참여자 통계",
+              "문제 관리",
+              "당첨자 관리",
+              "문제 추가/수정/삭제"
+            ]
+          },
+          {
+            "id": "admin-writings",
+            "title": "글쓰기 관리",
+            "route": "/admin/online-festival/writings",
+            "description": "사용자 글쓰기 관리",
+            "screenshot": "https://picsum.photos/seed/admin-writings/800/600",
+            "features": [
+              "글 목록",
+              "추천 설정",
+              "삭제",
+              "주제별 필터"
+            ]
+          },
+          {
+            "id": "admin-support",
+            "title": "응원메시지 관리",
+            "route": "/admin/online-festival/support",
+            "description": "응원 메시지 관리",
+            "screenshot": "https://picsum.photos/seed/admin-support/800/600",
+            "features": [
+              "메시지 목록",
+              "부적절 메시지 삭제",
+              "좋아요 통계"
+            ]
+          },
+          {
+            "id": "admin-winners",
+            "title": "당첨자 관리",
+            "route": "/admin/online-festival/winners",
+            "description": "경품 당첨자 관리",
+            "screenshot": "https://picsum.photos/seed/admin-winners/800/600",
+            "features": [
+              "당첨자 목록",
+              "경품 수령 상태 관리",
+              "당첨자 추첨"
+            ]
+          }
         ]
       },
       {
@@ -322,6 +472,18 @@
               "파일 관리",
               "저장"
             ]
+          },
+          {
+            "id": "admin-news-detail",
+            "title": "소식 상세",
+            "route": "/admin/news/:id",
+            "description": "소식 상세 조회",
+            "screenshot": "https://picsum.photos/seed/admin-news-detail/800/600",
+            "features": [
+              "내용 조회",
+              "첨부파일 확인",
+              "조회수 통계"
+            ]
           }
         ]
       },
@@ -353,38 +515,24 @@
         ]
       },
       {
-        "id": "admin-quiz",
-        "title": "퀴즈 관리",
-        "route": "/admin/quiz",
-        "description": "퀴즈 이벤트 관리",
-        "screenshot": "https://picsum.photos/seed/admin-quiz/800/600",
-        "features": [
-          "참여자 통계",
-          "문제 관리",
-          "당첨자 관리"
-        ]
-      },
-      {
-        "id": "admin-writings",
-        "title": "글쓰기 관리",
-        "route": "/admin/writings",
-        "description": "사용자 글쓰기 관리",
-        "screenshot": "https://picsum.photos/seed/admin-writings/800/600",
-        "features": [
-          "글 목록",
-          "추천 설정",
-          "삭제"
-        ]
-      },
-      {
-        "id": "admin-support",
-        "title": "응원메시지 관리",
-        "route": "/admin/support",
-        "description": "응원 메시지 관리",
-        "screenshot": "https://picsum.photos/seed/admin-support/800/600",
-        "features": [
-          "메시지 목록",
-          "부적절 메시지 삭제"
+        "id": "admin-settings",
+        "title": "기타 설정",
+        "route": "/admin/settings",
+        "description": "시스템 설정 및 관리",
+        "screenshot": "https://picsum.photos/seed/admin-settings/800/600",
+        "children": [
+          {
+            "id": "admin-weather-banner",
+            "title": "날씨 배너 설정",
+            "route": "/admin/settings/weather-banner",
+            "description": "메인 페이지 날씨 배너 설정",
+            "screenshot": "https://picsum.photos/seed/admin-weather/800/600",
+            "features": [
+              "날씨 정보 연동",
+              "배너 디자인 설정",
+              "표시 여부 관리"
+            ]
+          }
         ]
       }
     ]

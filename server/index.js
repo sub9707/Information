@@ -32,6 +32,7 @@ let apisData;
 try {
   pagesData = require('./data/pages.json');
   apisData = require('./data/apis.json');
+  tablesData = require('./data/tables.json');
   console.log('✅ 데이터 파일 로드 성공');
 } catch (error) {
   console.error('❌ 데이터 파일 로드 실패:', error.message);
@@ -72,7 +73,7 @@ app.get('/api/pages', (req, res) => {
 app.get('/api/pages/:type', (req, res) => {
   try {
     const { type } = req.params;
-    
+
     if (!pagesData[type]) {
       return res.status(404).json({
         success: false,
@@ -116,7 +117,7 @@ app.get('/api/apis', (req, res) => {
 app.get('/api/apis/:category', (req, res) => {
   try {
     const { category } = req.params;
-    
+
     if (!apisData[category]) {
       return res.status(404).json({
         success: false,
@@ -143,7 +144,7 @@ app.get('/api/apis/:category', (req, res) => {
 app.get('/api/apis/:category/:apiId', (req, res) => {
   try {
     const { category, apiId } = req.params;
-    
+
     if (!apisData[category]) {
       return res.status(404).json({
         success: false,
@@ -153,7 +154,7 @@ app.get('/api/apis/:category/:apiId', (req, res) => {
     }
 
     const api = apisData[category].apis.find(a => a.id === apiId);
-    
+
     if (!api) {
       return res.status(404).json({
         success: false,
@@ -171,6 +172,67 @@ app.get('/api/apis/:category/:apiId', (req, res) => {
     res.status(500).json({
       success: false,
       error: 'API 데이터를 불러오는데 실패했습니다.',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// 특정 테이블 정보 조회
+app.get('/api/tables/:tableName', (req, res) => {
+  try {
+    const { tableName } = req.params;
+    
+    if (!tablesData[tableName]) {
+      return res.status(404).json({
+        success: false,
+        error: `'${tableName}' 테이블을 찾을 수 없습니다.`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    res.json({
+      success: true,
+      data: tablesData[tableName],
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'SQL 테이블 데이터를 불러오는데 실패했습니다.',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
+// 카테고리별 테이블 조회
+app.get('/api/tables/category/:category', (req, res) => {
+  try {
+    const { category } = req.params;
+    
+    const filteredTables = Object.entries(tablesData)
+      .filter(([_, table]) => table.category === category)
+      .reduce((acc, [name, table]) => {
+        acc[name] = table;
+        return acc;
+      }, {});
+
+    if (Object.keys(filteredTables).length === 0) {
+      return res.status(404).json({
+        success: false,
+        error: `'${category}' 카테고리의 테이블을 찾을 수 없습니다.`,
+        timestamp: new Date().toISOString()
+      });
+    }
+
+    res.json({
+      success: true,
+      data: filteredTables,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'SQL 테이블 데이터를 불러오는데 실패했습니다.',
       timestamp: new Date().toISOString()
     });
   }
@@ -226,6 +288,23 @@ app.get('/api/stats', (req, res) => {
   }
 });
 
+// SQL 테이블 정보 조회
+app.get('/api/tables', (req, res) => {
+  try {
+    res.json({
+      success: true,
+      data: tablesData,
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    res.status(500).json({
+      success: false,
+      error: 'SQL 테이블 데이터를 불러오는데 실패했습니다.',
+      timestamp: new Date().toISOString()
+    });
+  }
+});
+
 // 404 에러 핸들러 (모든 라우트 마지막에 위치)
 app.use((req, res, next) => {
   // API 요청인 경우
@@ -237,7 +316,7 @@ app.use((req, res, next) => {
       timestamp: new Date().toISOString()
     });
   }
-  
+
   // 개발 모드에서는 404 메시지 반환
   if (process.env.NODE_ENV !== 'production') {
     return res.status(404).json({
@@ -247,7 +326,7 @@ app.use((req, res, next) => {
       timestamp: new Date().toISOString()
     });
   }
-  
+
   next();
 });
 

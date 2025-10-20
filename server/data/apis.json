@@ -9,109 +9,16 @@
         "name": "로그인",
         "method": "POST",
         "endpoint": "/api/auth/login",
-        "description": "전화번호 또는 소셜 계정으로 로그인",
-        "authentication": false,
-        "request": {
-          "body": {
-            "phone": {
-              "type": "string",
-              "required": true,
-              "description": "전화번호 (하이픈 제외)",
-              "example": "01012345678"
-            },
-            "password": {
-              "type": "string",
-              "required": true,
-              "description": "비밀번호",
-              "example": "password123"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "로그인 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "user": {
-                  "id": "uuid",
-                  "name": "홍길동",
-                  "username": "hong123",
-                  "phone": "01012345678"
-                },
-                "token": "session_token_here"
-              }
-            }
-          },
-          "401": {
-            "description": "인증 실패",
-            "example": {
-              "success": false,
-              "error": "전화번호 또는 비밀번호가 일치하지 않습니다."
-            }
-          }
-        }
+        "description": "전화번호로 로그인",
+        "authentication": false
       },
       {
         "id": "auth-register",
         "name": "회원가입",
         "method": "POST",
         "endpoint": "/api/auth/register",
-        "description": "신규 회원 가입",
-        "authentication": false,
-        "request": {
-          "body": {
-            "name": {
-              "type": "string",
-              "required": true,
-              "description": "이름",
-              "example": "홍길동"
-            },
-            "username": {
-              "type": "string",
-              "required": true,
-              "description": "사용자명 (고유)",
-              "example": "hong123"
-            },
-            "phone": {
-              "type": "string",
-              "required": true,
-              "description": "전화번호",
-              "example": "01012345678"
-            },
-            "password": {
-              "type": "string",
-              "required": true,
-              "description": "비밀번호",
-              "example": "password123"
-            },
-            "gender": {
-              "type": "enum",
-              "required": true,
-              "values": ["male", "female", "none"],
-              "description": "성별",
-              "example": "male"
-            },
-            "birth_date": {
-              "type": "date",
-              "required": true,
-              "description": "생년월일",
-              "example": "1990-01-01"
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "회원가입 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "userId": "uuid-here",
-                "message": "회원가입이 완료되었습니다."
-              }
-            }
-          }
-        }
+        "description": "신규 회원 가입 (전화번호/SNS)",
+        "authentication": false
       },
       {
         "id": "auth-logout",
@@ -119,69 +26,67 @@
         "method": "POST",
         "endpoint": "/api/auth/logout",
         "description": "사용자 로그아웃 (세션 종료)",
-        "authentication": true,
-        "response": {
-          "200": {
-            "description": "로그아웃 성공",
-            "example": {
-              "success": true,
-              "message": "로그아웃되었습니다."
-            }
-          }
-        }
+        "authentication": true
       },
       {
-        "id": "auth-verify-phone",
-        "name": "전화번호 인증",
+        "id": "auth-forgot-password",
+        "name": "비밀번호 찾기 인증",
         "method": "POST",
-        "endpoint": "/api/auth/verify-phone",
-        "description": "SMS 인증 코드 발송 및 확인",
-        "authentication": false,
-        "request": {
-          "body": {
-            "phone": {
-              "type": "string",
-              "required": true,
-              "description": "인증할 전화번호",
-              "example": "01012345678"
-            },
-            "code": {
-              "type": "string",
-              "required": false,
-              "description": "인증 코드 (확인 시)",
-              "example": "123456"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "인증 성공",
-            "example": {
-              "success": true,
-              "message": "인증이 완료되었습니다."
-            }
-          }
-        }
-      },
-      {
-        "id": "auth-social-naver",
-        "name": "네이버 소셜 로그인",
-        "method": "GET",
-        "endpoint": "/api/auth/naver",
-        "description": "네이버 OAuth 로그인",
+        "endpoint": "/api/auth/forgot-password",
+        "description": "비밀번호 재설정용 인증번호 발송",
         "authentication": false
       },
       {
-        "id": "auth-social-kakao",
-        "name": "카카오 소셜 로그인",
+        "id": "auth-verify-reset-code",
+        "name": "비밀번호 재설정 코드 확인",
+        "method": "POST",
+        "endpoint": "/api/auth/verify-reset-code",
+        "description": "비밀번호 재설정 인증번호 확인",
+        "authentication": false
+      },
+      {
+        "id": "auth-reset-password",
+        "name": "비밀번호 재설정",
+        "method": "POST",
+        "endpoint": "/api/auth/reset-password",
+        "description": "새 비밀번호로 변경",
+        "authentication": false
+      },
+      {
+        "id": "auth-change-password",
+        "name": "비밀번호 변경",
+        "method": "POST",
+        "endpoint": "/api/auth/change-password",
+        "description": "로그인 상태에서 비밀번호 변경",
+        "authentication": true
+      },
+      {
+        "id": "auth-change-password-with-email",
+        "name": "이메일로 비밀번호 변경",
+        "method": "POST",
+        "endpoint": "/api/auth/change-password-with-email",
+        "description": "이메일 인증으로 비밀번호 변경",
+        "authentication": false
+      },
+      {
+        "id": "auth-delete-account",
+        "name": "회원탈퇴",
+        "method": "POST",
+        "endpoint": "/api/auth/delete-account",
+        "description": "사용자 계정 삭제",
+        "authentication": true
+      },
+      {
+        "id": "auth-oauth",
+        "name": "소셜 로그인 OAuth",
         "method": "GET",
-        "endpoint": "/api/auth/kakao",
-        "description": "카카오 OAuth 로그인",
+        "endpoint": "/api/auth/oauth",
+        "description": "네이버/카카오 OAuth 로그인 및 콜백 처리",
         "authentication": false
       }
     ]
   },
-  "registrations": {
+  "registration": {
     "title": "사전접수 API",
     "description": "사전 참가 신청 관련 API",
     "color": "#10b981",
@@ -190,133 +95,25 @@
         "id": "registration-create",
         "name": "신청 생성",
         "method": "POST",
-        "endpoint": "/api/registrations",
+        "endpoint": "/api/registration",
         "description": "새로운 사전접수 신청 생성",
-        "authentication": true,
-        "request": {
-          "body": {
-            "participant_type": {
-              "type": "enum",
-              "required": true,
-              "values": ["citizen", "single-parent", "self-help", "volunteer", "organization"],
-              "description": "참가자 유형",
-              "example": "citizen"
-            },
-            "companions": {
-              "type": "number",
-              "required": true,
-              "description": "동반 인원 수",
-              "example": 2
-            },
-            "program_ids": {
-              "type": "array",
-              "required": true,
-              "description": "참여 프로그램 ID 목록",
-              "example": ["prog-1", "prog-2"]
-            },
-            "meal_option": {
-              "type": "string",
-              "required": false,
-              "description": "식사 옵션",
-              "example": "lunch"
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "신청 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "registration_number": "MH2025-000001",
-                "id": "uuid"
-              }
-            }
-          }
-        }
+        "authentication": true
       },
       {
         "id": "registration-list",
-        "name": "신청 목록",
+        "name": "내 신청 목록",
         "method": "GET",
-        "endpoint": "/api/registrations",
-        "description": "사전접수 신청 목록 조회",
-        "authentication": true,
-        "request": {
-          "query": {
-            "page": {
-              "type": "number",
-              "required": false,
-              "default": 1,
-              "description": "페이지 번호"
-            },
-            "limit": {
-              "type": "number",
-              "required": false,
-              "default": 20,
-              "description": "페이지당 항목 수"
-            },
-            "search": {
-              "type": "string",
-              "required": false,
-              "description": "검색어 (이름, 전화번호)"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "목록 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "items": [],
-                "total": 100,
-                "page": 1,
-                "totalPages": 5
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "registration-detail",
-        "name": "신청 상세",
-        "method": "GET",
-        "endpoint": "/api/registrations/:id",
-        "description": "개별 신청 상세 조회",
-        "authentication": true,
-        "response": {
-          "200": {
-            "description": "조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "id": "uuid",
-                "registration_number": "MH2025-000001",
-                "participant_type": "citizen",
-                "companions": 2,
-                "status": "confirmed"
-              }
-            }
-          }
-        }
+        "endpoint": "/api/registration",
+        "description": "사용자의 사전접수 신청 목록 조회",
+        "authentication": true
       },
       {
         "id": "registration-cancel",
         "name": "신청 취소",
         "method": "DELETE",
-        "endpoint": "/api/registrations/:id",
+        "endpoint": "/api/registration",
         "description": "사전접수 신청 취소",
-        "authentication": true,
-        "response": {
-          "200": {
-            "description": "취소 성공",
-            "example": {
-              "success": true,
-              "message": "신청이 취소되었습니다."
-            }
-          }
-        }
+        "authentication": true
       }
     ]
   },
@@ -330,116 +127,16 @@
         "name": "소식 목록",
         "method": "GET",
         "endpoint": "/api/news",
-        "description": "소식 목록 조회",
-        "authentication": false,
-        "request": {
-          "query": {
-            "page": {
-              "type": "number",
-              "required": false,
-              "default": 1
-            },
-            "category": {
-              "type": "string",
-              "required": false,
-              "description": "카테고리 필터"
-            },
-            "search": {
-              "type": "string",
-              "required": false,
-              "description": "검색어"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "목록 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "items": [
-                  {
-                    "id": "news-1",
-                    "title": "축제 일정 안내",
-                    "category": "공지",
-                    "date": "2025-01-15",
-                    "views": 150,
-                    "important": true
-                  }
-                ]
-              }
-            }
-          }
-        }
+        "description": "소식 목록 조회 (페이지네이션, 검색, 필터)",
+        "authentication": false
       },
       {
         "id": "news-detail",
         "name": "소식 상세",
         "method": "GET",
-        "endpoint": "/api/news/:id",
+        "endpoint": "/api/news/[id]",
         "description": "개별 소식 상세 조회",
-        "authentication": false,
-        "response": {
-          "200": {
-            "description": "조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "id": "news-1",
-                "title": "축제 일정 안내",
-                "content": "<p>본문 내용</p>",
-                "category": "공지",
-                "views": 150,
-                "attachments": []
-              }
-            }
-          }
-        }
-      },
-      {
-        "id": "news-create",
-        "name": "소식 등록",
-        "method": "POST",
-        "endpoint": "/api/admin/news",
-        "description": "새 소식 등록 (관리자)",
-        "authentication": true,
-        "adminOnly": true,
-        "request": {
-          "body": {
-            "title": {
-              "type": "string",
-              "required": true,
-              "description": "제목"
-            },
-            "content": {
-              "type": "string",
-              "required": true,
-              "description": "내용 (HTML)"
-            },
-            "category": {
-              "type": "string",
-              "required": true,
-              "description": "카테고리"
-            },
-            "important": {
-              "type": "boolean",
-              "required": false,
-              "default": false,
-              "description": "중요 공지 여부"
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "등록 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "id": "news-new"
-              }
-            }
-          }
-        }
+        "authentication": false
       }
     ]
   },
@@ -454,33 +151,7 @@
         "method": "GET",
         "endpoint": "/api/writings",
         "description": "글쓰기 목록 조회",
-        "authentication": false,
-        "request": {
-          "query": {
-            "topic": {
-              "type": "enum",
-              "required": false,
-              "values": ["가족에게 전하고 싶은 말", "가족과 함께해서 즐거웠던 순간"],
-              "description": "주제 필터"
-            },
-            "page": {
-              "type": "number",
-              "required": false,
-              "default": 1
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "목록 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "items": []
-              }
-            }
-          }
-        }
+        "authentication": false
       },
       {
         "id": "writings-featured",
@@ -488,16 +159,7 @@
         "method": "GET",
         "endpoint": "/api/writings/featured",
         "description": "추천 글 목록 조회",
-        "authentication": false,
-        "response": {
-          "200": {
-            "description": "조회 성공",
-            "example": {
-              "success": true,
-              "data": []
-            }
-          }
-        }
+        "authentication": false
       },
       {
         "id": "writings-create",
@@ -505,57 +167,15 @@
         "method": "POST",
         "endpoint": "/api/writings",
         "description": "새 글 작성",
-        "authentication": true,
-        "request": {
-          "body": {
-            "topic": {
-              "type": "enum",
-              "required": true,
-              "values": ["가족에게 전하고 싶은 말", "가족과 함께해서 즐거웠던 순간"]
-            },
-            "title": {
-              "type": "string",
-              "required": true,
-              "description": "제목"
-            },
-            "content": {
-              "type": "string",
-              "required": true,
-              "description": "내용"
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "작성 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "id": "writing-new"
-              }
-            }
-          }
-        }
+        "authentication": true
       },
       {
         "id": "writings-like",
         "name": "글 좋아요",
         "method": "POST",
-        "endpoint": "/api/writings/:id/like",
+        "endpoint": "/api/writings/[id]/like",
         "description": "글에 좋아요 추가/취소",
-        "authentication": true,
-        "response": {
-          "200": {
-            "description": "성공",
-            "example": {
-              "success": true,
-              "data": {
-                "liked": true,
-                "likesCount": 10
-              }
-            }
-          }
-        }
+        "authentication": true
       }
     ]
   },
@@ -570,33 +190,23 @@
         "method": "GET",
         "endpoint": "/api/support-comments",
         "description": "응원 메시지 목록 조회",
-        "authentication": false,
-        "request": {
-          "query": {
-            "page": {
-              "type": "number",
-              "required": false,
-              "default": 1
-            },
-            "sort": {
-              "type": "enum",
-              "required": false,
-              "values": ["recent", "popular"],
-              "default": "recent"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "items": []
-              }
-            }
-          }
-        }
+        "authentication": false
+      },
+      {
+        "id": "support-stats",
+        "name": "메시지 통계",
+        "method": "GET",
+        "endpoint": "/api/support-comments/stats",
+        "description": "응원 메시지 통계 조회",
+        "authentication": false
+      },
+      {
+        "id": "support-recent",
+        "name": "최근 메시지",
+        "method": "GET",
+        "endpoint": "/api/support-comments/recent",
+        "description": "최근 응원 메시지 조회 (슬라이더용)",
+        "authentication": false
       },
       {
         "id": "support-create",
@@ -604,43 +214,15 @@
         "method": "POST",
         "endpoint": "/api/support-comments",
         "description": "새 응원 메시지 작성",
-        "authentication": true,
-        "request": {
-          "body": {
-            "message": {
-              "type": "string",
-              "required": true,
-              "description": "응원 메시지 내용"
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "작성 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "id": "comment-new"
-              }
-            }
-          }
-        }
+        "authentication": true
       },
       {
         "id": "support-like",
         "name": "메시지 좋아요",
         "method": "POST",
-        "endpoint": "/api/support-comments/:id/like",
+        "endpoint": "/api/support-comments/[id]/like",
         "description": "메시지에 좋아요",
-        "authentication": true,
-        "response": {
-          "200": {
-            "description": "성공",
-            "example": {
-              "success": true
-            }
-          }
-        }
+        "authentication": true
       }
     ]
   },
@@ -650,35 +232,28 @@
     "color": "#06b6d4",
     "apis": [
       {
-        "id": "quiz-participate",
-        "name": "퀴즈 참여",
+        "id": "quiz-questions",
+        "name": "퀴즈 문제 조회",
+        "method": "GET",
+        "endpoint": "/api/quiz/questions",
+        "description": "퀴즈 문제 목록 조회",
+        "authentication": false
+      },
+      {
+        "id": "quiz-register-participation",
+        "name": "퀴즈 참여 등록",
         "method": "POST",
-        "endpoint": "/api/quiz/participate",
+        "endpoint": "/api/quiz/register-participation",
         "description": "퀴즈 이벤트 참여 및 답안 제출",
-        "authentication": true,
-        "request": {
-          "body": {
-            "answers": {
-              "type": "array",
-              "required": true,
-              "description": "답안 배열",
-              "example": [1, 2, 0, 3]
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "참여 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "score": 4,
-                "perfect_score": true,
-                "completion_time": 120
-              }
-            }
-          }
-        }
+        "authentication": true
+      },
+      {
+        "id": "quiz-participants",
+        "name": "퀴즈 참여자 목록",
+        "method": "GET",
+        "endpoint": "/api/quiz/participants",
+        "description": "퀴즈 참여자 목록 조회",
+        "authentication": false
       },
       {
         "id": "quiz-stats",
@@ -686,20 +261,45 @@
         "method": "GET",
         "endpoint": "/api/quiz/stats",
         "description": "퀴즈 참여 통계",
-        "authentication": false,
-        "response": {
-          "200": {
-            "description": "통계 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "total_participants": 500,
-                "perfect_score_participants": 50,
-                "avg_completion_time": 150
-              }
-            }
-          }
-        }
+        "authentication": false
+      }
+    ]
+  },
+  "campaign": {
+    "title": "캠페인 API",
+    "description": "캠페인 통계 관련 API",
+    "color": "#84cc16",
+    "apis": [
+      {
+        "id": "campaign-stats",
+        "name": "캠페인 통계",
+        "method": "GET",
+        "endpoint": "/api/campaign/stats",
+        "description": "캠페인 참여 통계 조회 (사전접수, 응원메시지, 글쓰기)",
+        "authentication": false
+      },
+      {
+        "id": "campaign-stats-post",
+        "name": "캠페인 통계 관리",
+        "method": "POST",
+        "endpoint": "/api/campaign/stats",
+        "description": "캠페인 통계 캐시 무효화 및 상태 조회",
+        "authentication": false
+      }
+    ]
+  },
+  "analytics": {
+    "title": "분석 API",
+    "description": "시스템 모니터링 관련 API",
+    "color": "#a855f7",
+    "apis": [
+      {
+        "id": "analytics-pool-status",
+        "name": "DB 연결 풀 상태",
+        "method": "GET",
+        "endpoint": "/api/analytics/pool-status",
+        "description": "데이터베이스 연결 풀 상태 조회",
+        "authentication": false
       }
     ]
   },
@@ -709,27 +309,13 @@
     "color": "#ef4444",
     "apis": [
       {
-        "id": "admin-stats",
+        "id": "admin-dashboard-stats",
         "name": "대시보드 통계",
         "method": "GET",
         "endpoint": "/api/admin/dashboard/stats",
         "description": "전체 통계 데이터",
         "authentication": true,
-        "adminOnly": true,
-        "response": {
-          "200": {
-            "description": "통계 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "totalVisitors": 10000,
-                "pageViews": 50000,
-                "registrations": 500,
-                "campaignParticipants": 300
-              }
-            }
-          }
-        }
+        "adminOnly": true
       },
       {
         "id": "admin-ga4",
@@ -738,40 +324,7 @@
         "endpoint": "/api/admin/ga4",
         "description": "Google Analytics 4 통계 조회",
         "authentication": true,
-        "adminOnly": true,
-        "request": {
-          "body": {
-            "startDate": {
-              "type": "string",
-              "required": true,
-              "description": "시작 날짜 (YYYY-MM-DD)",
-              "example": "2025-01-01"
-            },
-            "endDate": {
-              "type": "string",
-              "required": true,
-              "description": "종료 날짜 (YYYY-MM-DD)",
-              "example": "2025-01-31"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "GA4 데이터 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "summary": {
-                  "totalPageViews": 50000,
-                  "totalUsers": 10000
-                },
-                "dailyStats": [],
-                "pages": [],
-                "topSources": []
-              }
-            }
-          }
-        }
+        "adminOnly": true
       },
       {
         "id": "admin-users-list",
@@ -780,64 +333,131 @@
         "endpoint": "/api/admin/users",
         "description": "회원 목록 조회",
         "authentication": true,
-        "adminOnly": true,
-        "request": {
-          "query": {
-            "page": {
-              "type": "number",
-              "required": false,
-              "default": 1
-            },
-            "search": {
-              "type": "string",
-              "required": false,
-              "description": "검색어"
-            }
-          }
-        },
-        "response": {
-          "200": {
-            "description": "목록 조회 성공",
-            "example": {
-              "success": true,
-              "data": {
-                "items": [],
-                "total": 1000
-              }
-            }
-          }
-        }
+        "adminOnly": true
       },
       {
-        "id": "admin-blacklist",
-        "name": "블랙리스트 관리",
+        "id": "admin-users-create",
+        "name": "회원 생성",
         "method": "POST",
-        "endpoint": "/api/admin/blacklist",
-        "description": "사용자 블랙리스트 추가",
+        "endpoint": "/api/admin/users",
+        "description": "새 회원 생성 (관리자용)",
         "authentication": true,
-        "adminOnly": true,
-        "request": {
-          "body": {
-            "phone_hash": {
-              "type": "string",
-              "required": true,
-              "description": "전화번호 해시"
-            },
-            "reason": {
-              "type": "enum",
-              "required": true,
-              "values": ["excessive_signup_deletion", "fraud_suspicion", "abuse"]
-            }
-          }
-        },
-        "response": {
-          "201": {
-            "description": "추가 성공",
-            "example": {
-              "success": true
-            }
-          }
-        }
+        "adminOnly": true
+      },
+      {
+        "id": "admin-user-detail",
+        "name": "회원 상세",
+        "method": "GET",
+        "endpoint": "/api/admin/users/[id]",
+        "description": "개별 회원 상세 조회",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-user-update",
+        "name": "회원 정보 수정",
+        "method": "PUT",
+        "endpoint": "/api/admin/users/[id]",
+        "description": "회원 정보 업데이트",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-user-delete",
+        "name": "회원 삭제",
+        "method": "DELETE",
+        "endpoint": "/api/admin/users/[id]",
+        "description": "회원 계정 삭제",
+        "authentication": true,
+        "adminOnly": true
+      }
+    ]
+  },
+  "admin-online-festival": {
+    "title": "관리자 온라인축제 API",
+    "description": "온라인 축제 이벤트 관리 API",
+    "color": "#f97316",
+    "apis": [
+      {
+        "id": "admin-registrations-list",
+        "name": "사전접수 목록",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/registrations",
+        "description": "사전접수 신청 목록 조회 (관리자)",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-quiz-participants-list",
+        "name": "퀴즈 참여자 목록",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/quiz-participants",
+        "description": "퀴즈 참여자 목록 조회 (관리자)",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-quiz-participant-delete",
+        "name": "퀴즈 참여자 삭제",
+        "method": "DELETE",
+        "endpoint": "/api/admin/online-festival/quiz-participants/[id]",
+        "description": "퀴즈 참여자 삭제",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-writings-list",
+        "name": "글쓰기 목록",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/writings",
+        "description": "글쓰기 목록 조회 (관리자)",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-writing-delete",
+        "name": "글쓰기 삭제",
+        "method": "DELETE",
+        "endpoint": "/api/admin/online-festival/writings/[id]",
+        "description": "글쓰기 삭제",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-support-comments-list",
+        "name": "응원메시지 목록",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/support-comments",
+        "description": "응원 메시지 목록 조회 (관리자)",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-support-comment-delete",
+        "name": "응원메시지 삭제",
+        "method": "DELETE",
+        "endpoint": "/api/admin/online-festival/support-comments/[id]",
+        "description": "응원 메시지 삭제",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-support-comments-export",
+        "name": "응원메시지 엑셀 다운로드",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/support-comments/export",
+        "description": "응원 메시지 엑셀 파일 다운로드",
+        "authentication": true,
+        "adminOnly": true
+      },
+      {
+        "id": "admin-support-comments-participants",
+        "name": "응원메시지 참여자 목록",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/support-comments/participants",
+        "description": "응원 메시지 참여자 목록 조회 (중복 제거)",
+        "authentication": true,
+        "adminOnly": true
       }
     ]
   }

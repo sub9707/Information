@@ -1,175 +1,374 @@
 .sql-info-page {
-  max-width: 1000px;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  padding-top: 70px;
+  background-color: var(--color-bg);
+}
+
+/* ========== 페이지 헤더 ========== */
+.page-header {
+  padding: 1.5rem;
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+  z-index: 10;
+}
+
+.header-content {
+  max-width: 1400px;
   margin: 0 auto;
-}
-
-.coming-soon-container {
-  min-height: 60vh;
   display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 2rem 0;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 2rem;
 }
 
-.coming-soon-content {
-  text-align: center;
-  max-width: 700px;
+.header-text {
+  flex: 1;
 }
 
-.coming-soon-icon {
-  display: flex;
-  justify-content: center;
-  margin-bottom: 2rem;
-  color: var(--color-primary);
-}
-
-.coming-soon-title {
+.page-title {
   font-size: 2rem;
   font-weight: 700;
   color: var(--color-text);
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
-.coming-soon-description {
-  font-size: 1.125rem;
+.page-description {
+  font-size: 0.9375rem;
   color: var(--color-text-secondary);
-  line-height: 1.7;
-  margin-bottom: 3rem;
+  line-height: 1.6;
 }
 
-.info-box {
-  background-color: var(--color-bg-secondary);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-lg);
-  padding: 2rem;
-  margin-bottom: 3rem;
-  text-align: left;
-}
-
-.info-box-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 1.5rem;
-  text-align: center;
-}
-
-.info-list {
-  list-style: none;
+.header-controls {
   display: flex;
   flex-direction: column;
+  align-items: flex-end;
   gap: 1rem;
 }
 
-.info-list li {
-  font-size: 0.9375rem;
-  color: var(--color-text-secondary);
-  padding-left: 1.5rem;
-  position: relative;
+/* ========== 카테고리 선택기 ========== */
+.category-selector {
+  display: flex;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+  justify-content: flex-end;
 }
 
-.info-list li::before {
-  content: '▸';
+.category-button {
+  padding: 0.5rem 1rem;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.category-button:hover {
+  background-color: var(--color-bg-tertiary);
+  border-color: var(--color-primary);
+  color: var(--color-text);
+}
+
+.category-button.active {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow-md);
+  transform: scale(1.05);
+}
+
+/* ========== 안내 버튼 ========== */
+.info-button {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.info-button:hover {
+  background-color: var(--color-primary);
+  border-color: var(--color-primary);
+  color: white;
+  box-shadow: var(--shadow-md);
+  transform: scale(1.05);
+}
+
+/* ========== 안내 툴팁 ========== */
+.instructions-tooltip {
+  position: absolute;
+  top: 4rem;
+  right: 1rem;
+  z-index: 10;
+  width: 320px;
+  background-color: var(--color-bg);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  padding: 1.5rem;
+  animation: tooltipSlideIn 0.2s ease-out;
+}
+
+@keyframes tooltipSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.instructions-close {
+  position: absolute;
+  top: 0.75rem;
+  right: 0.75rem;
+  width: 1.5rem;
+  height: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-secondary);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: all var(--transition-fast);
+  font-size: 1.5rem;
+  line-height: 1;
+}
+
+.instructions-close:hover {
+  background-color: var(--color-bg-secondary);
+  color: var(--color-text);
+}
+
+.instructions-title {
+  font-size: 1rem;
+  font-weight: 600;
+  color: var(--color-text);
+  margin-bottom: 1rem;
+  padding-right: 1.5rem;
+}
+
+.instructions-list {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.instructions-list li {
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  padding-left: 1.25rem;
+  position: relative;
+  line-height: 1.5;
+}
+
+.instructions-list li::before {
+  content: '→';
   position: absolute;
   left: 0;
   color: var(--color-primary);
   font-weight: 700;
 }
 
-.info-list strong {
-  color: var(--color-text);
-  font-weight: 600;
+/* ========== 다이어그램 컨테이너 ========== */
+.diagram-container {
+  flex: 1;
+  position: relative;
+  background-color: #f9fafb;
 }
 
-.planned-features {
-  margin-bottom: 3rem;
+/* ========== 로딩/에러 상태 ========== */
+.page-loading,
+.page-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 1rem;
+  padding: 2rem;
 }
 
-.planned-features-title {
-  font-size: 1.25rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 1.5rem;
+.loading-spinner {
+  width: 3rem;
+  height: 3rem;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
 
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
-  margin-top: 1.5rem;
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
 }
 
-.feature-item {
-  padding: 1.5rem;
-  background-color: var(--color-bg);
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  transition: all var(--transition-base);
-}
-
-.feature-item:hover {
-  border-color: var(--color-primary);
-  box-shadow: var(--shadow-sm);
-  transform: translateY(-2px);
-}
-
-.feature-icon {
-  font-size: 2rem;
-  margin-bottom: 0.75rem;
-}
-
-.feature-item h4 {
+.page-loading p,
+.page-error p {
   font-size: 1rem;
-  font-weight: 600;
-  color: var(--color-text);
-  margin-bottom: 0.5rem;
-}
-
-.feature-item p {
-  font-size: 0.875rem;
   color: var(--color-text-secondary);
 }
 
-.github-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1.5rem;
-  background-color: var(--color-gray-900);
-  color: white;
-  border-radius: var(--radius-md);
-  text-decoration: none;
-  font-weight: 500;
-  font-size: 0.9375rem;
-  transition: all var(--transition-base);
-  box-shadow: var(--shadow-sm);
+.error-message {
+  color: var(--color-text-secondary);
+  font-size: 1rem;
 }
 
-.github-link:hover {
-  background-color: var(--color-gray-800);
-  transform: translateY(-2px);
+.retry-button {
+  padding: 0.625rem 1.5rem;
+  background-color: var(--color-primary);
+  color: white;
+  border: none;
+  border-radius: var(--radius-md);
+  font-weight: 500;
+  font-size: 0.9375rem;
+  cursor: pointer;
+  transition: background-color var(--transition-fast);
+}
+
+.retry-button:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* ========== React Flow 커스텀 스타일 ========== */
+.react-flow__controls {
+  bottom: 1rem;
+  left: 1rem;
+  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+.react-flow__controls-button {
+  background-color: var(--color-bg);
+  border-bottom: 1px solid var(--color-border);
+}
+
+.react-flow__controls-button:hover {
+  background-color: var(--color-bg-secondary);
+}
+
+.react-flow__minimap {
+  bottom: 1rem;
+  right: 1rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
 }
 
+.react-flow__handle {
+  width: 8px;
+  height: 8px;
+  background-color: var(--color-primary);
+  border: 2px solid var(--color-bg);
+}
+
+.react-flow__handle:hover {
+  background-color: var(--color-primary-hover);
+}
+
+/* ========== 반응형 ========== */
+@media (max-width: 1024px) {
+  .header-content {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .header-controls {
+    width: 100%;
+    align-items: stretch;
+  }
+
+  .category-selector {
+    justify-content: flex-start;
+  }
+
+  .info-button {
+    align-self: flex-end;
+  }
+}
+
 @media (max-width: 768px) {
-  .coming-soon-title {
-    font-size: 1.75rem;
+  .sql-info-page {
+    padding-top: 65px;
   }
 
-  .coming-soon-description {
-    font-size: 1rem;
+  .page-header {
+    padding: 1rem;
   }
 
-  .info-box {
-    padding: 1.5rem;
+  .page-title {
+    font-size: 1.5rem;
   }
 
-  .features-grid {
-    grid-template-columns: 1fr;
-    gap: 1rem;
+  .page-description {
+    font-size: 0.875rem;
   }
 
-  .feature-item {
+  .category-selector {
+    width: 100%;
+  }
+
+  .category-button {
+    flex: 1;
+    min-width: 0;
+    padding: 0.5rem 0.75rem;
+    font-size: 0.8125rem;
+  }
+
+  .info-button {
+    width: 2.25rem;
+    height: 2.25rem;
+  }
+
+  .instructions-tooltip {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+    left: 1rem;
+  }
+
+  .react-flow__minimap {
+    display: none;
+  }
+
+  .react-flow__controls {
+    bottom: 0.5rem;
+    left: 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .page-title {
+    font-size: 1.25rem;
+  }
+
+  .instructions-tooltip {
     padding: 1.25rem;
+    top: 3.5rem;
+  }
+
+  .category-selector {
+    gap: 0.375rem;
+  }
+
+  .category-button {
+    padding: 0.5rem;
+    font-size: 0.75rem;
   }
 }
