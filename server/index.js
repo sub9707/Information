@@ -28,12 +28,16 @@ app.use((req, res, next) => {
 // 데이터 로드
 let pagesData;
 let apisData;
+let tablesData;
 
 try {
   pagesData = require('./data/pages.json');
   apisData = require('./data/apis.json');
   tablesData = require('./data/tables.json');
   console.log('✅ 데이터 파일 로드 성공');
+  console.log(`   - 페이지: ${Object.keys(pagesData).length}개`);
+  console.log(`   - API 카테고리: ${Object.keys(apisData).length}개`);
+  console.log(`   - 테이블: ${Object.keys(tablesData).length}개`);
 } catch (error) {
   console.error('❌ 데이터 파일 로드 실패:', error.message);
   process.exit(1);
@@ -140,38 +144,18 @@ app.get('/api/apis/:category', (req, res) => {
   }
 });
 
-// 특정 API 상세 정보 조회
-app.get('/api/apis/:category/:apiId', (req, res) => {
+// SQL 테이블 정보 조회
+app.get('/api/tables', (req, res) => {
   try {
-    const { category, apiId } = req.params;
-
-    if (!apisData[category]) {
-      return res.status(404).json({
-        success: false,
-        error: `'${category}' 카테고리를 찾을 수 없습니다.`,
-        timestamp: new Date().toISOString()
-      });
-    }
-
-    const api = apisData[category].apis.find(a => a.id === apiId);
-
-    if (!api) {
-      return res.status(404).json({
-        success: false,
-        error: `'${apiId}' API를 찾을 수 없습니다.`,
-        timestamp: new Date().toISOString()
-      });
-    }
-
     res.json({
       success: true,
-      data: api,
+      data: tablesData,
       timestamp: new Date().toISOString()
     });
   } catch (error) {
     res.status(500).json({
       success: false,
-      error: 'API 데이터를 불러오는데 실패했습니다.',
+      error: 'SQL 테이블 데이터를 불러오는데 실패했습니다.',
       timestamp: new Date().toISOString()
     });
   }
@@ -260,6 +244,9 @@ app.get('/api/stats', (req, res) => {
       return total + (category.apis ? category.apis.length : 0);
     }, 0);
 
+    // 테이블 수 계산
+    const tableCount = Object.keys(tablesData).length;
+
     res.json({
       success: true,
       data: {
@@ -273,7 +260,7 @@ app.get('/api/stats', (req, res) => {
           total: apiCount
         },
         database: {
-          tables: 20,
+          tables: tableCount,
           description: 'MariaDB 기반'
         }
       },
@@ -283,23 +270,6 @@ app.get('/api/stats', (req, res) => {
     res.status(500).json({
       success: false,
       error: '통계 데이터를 불러오는데 실패했습니다.',
-      timestamp: new Date().toISOString()
-    });
-  }
-});
-
-// SQL 테이블 정보 조회
-app.get('/api/tables', (req, res) => {
-  try {
-    res.json({
-      success: true,
-      data: tablesData,
-      timestamp: new Date().toISOString()
-    });
-  } catch (error) {
-    res.status(500).json({
-      success: false,
-      error: 'SQL 테이블 데이터를 불러오는데 실패했습니다.',
       timestamp: new Date().toISOString()
     });
   }
@@ -322,17 +292,17 @@ app.use((req, res, next) => {
     return res.status(404).json({
       success: false,
       error: '페이지를 찾을 수 없습니다.',
-      path: req.path,
       timestamp: new Date().toISOString()
     });
   }
 
-  next();
+  // 프로덕션에서는 React 앱의 index.html 제공
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
-// 전역 에러 핸들러
-app.use((error, req, res, next) => {
-  console.error('서버 에러:', error);
+// 에러 핸들러
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
   res.status(500).json({
     success: false,
     error: '서버 내부 오류가 발생했습니다.',
@@ -343,34 +313,10 @@ app.use((error, req, res, next) => {
 // 서버 시작
 app.listen(PORT, () => {
   console.log('');
-  console.log('='.repeat(50));
-  console.log('🚀 모두하나대축제 포트폴리오 서버 시작');
-  console.log('='.repeat(50));
-  console.log(`📍 서버 주소: http://localhost:${PORT}`);
-  console.log(`🌍 환경: ${process.env.NODE_ENV || 'development'}`);
-  console.log(`📊 페이지 데이터: ${Object.keys(pagesData).length}개 타입`);
-  console.log(`🔌 API 데이터: ${Object.keys(apisData).length}개 카테고리`);
-  console.log('='.repeat(50));
+  console.log('================================================');
+  console.log(`🚀 Server is running on port ${PORT}`);
+  console.log(`📍 http://localhost:${PORT}`);
+  console.log(`🌍 Environment: ${process.env.NODE_ENV || 'development'}`);
+  console.log('================================================');
   console.log('');
-  console.log('📌 사용 가능한 엔드포인트:');
-  console.log(`   GET  /api/health              - 헬스 체크`);
-  console.log(`   GET  /api/pages               - 전체 페이지 구조`);
-  console.log(`   GET  /api/pages/:type         - 특정 타입 페이지`);
-  console.log(`   GET  /api/apis                - 전체 API 정보`);
-  console.log(`   GET  /api/apis/:category      - 카테고리별 API`);
-  console.log(`   GET  /api/apis/:category/:id  - 특정 API 상세`);
-  console.log(`   GET  /api/stats               - 통계 정보`);
-  console.log('='.repeat(50));
-  console.log('');
-});
-
-// Graceful shutdown
-process.on('SIGTERM', () => {
-  console.log('SIGTERM 신호를 받았습니다. 서버를 종료합니다...');
-  process.exit(0);
-});
-
-process.on('SIGINT', () => {
-  console.log('\n서버를 종료합니다...');
-  process.exit(0);
 });

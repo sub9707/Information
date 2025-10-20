@@ -74,9 +74,7 @@
 }
 
 .category-button.active {
-  background-color: var(--color-primary);
-  border-color: var(--color-primary);
-  color: white;
+  color: orangered;
   box-shadow: var(--shadow-md);
   transform: scale(1.05);
 }
@@ -88,38 +86,39 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: var(--color-bg-secondary);
+  background-color: var(--color-bg);
   border: 1px solid var(--color-border);
-  border-radius: var(--radius-md);
-  color: var(--color-text-secondary);
+  border-radius: 50%;
+  color: var(--color-primary);
   cursor: pointer;
-  transition: all var(--transition-fast);
+  transition: all var(--transition-base);
+  box-shadow: var(--shadow-sm);
 }
 
 .info-button:hover {
   background-color: var(--color-primary);
-  border-color: var(--color-primary);
   color: white;
   box-shadow: var(--shadow-md);
-  transform: scale(1.05);
+  transform: scale(1.1);
 }
 
 /* ========== 안내 툴팁 ========== */
 .instructions-tooltip {
   position: absolute;
-  top: 4rem;
-  right: 1rem;
-  z-index: 10;
-  width: 320px;
+  top: 5rem;
+  right: 1.5rem;
+  z-index: 100;
   background-color: var(--color-bg);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
   padding: 1.5rem;
-  animation: tooltipSlideIn 0.2s ease-out;
+  width: 400px;
+  max-width: calc(100vw - 3rem);
+  animation: slideIn 0.3s ease-out;
 }
 
-@keyframes tooltipSlideIn {
+@keyframes slideIn {
   from {
     opacity: 0;
     transform: translateY(-10px);
@@ -132,21 +131,20 @@
 
 .instructions-close {
   position: absolute;
-  top: 0.75rem;
-  right: 0.75rem;
-  width: 1.5rem;
-  height: 1.5rem;
+  top: 0.5rem;
+  right: 0.5rem;
+  width: 2rem;
+  height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   background: none;
   border: none;
-  color: var(--color-text-secondary);
-  cursor: pointer;
-  border-radius: var(--radius-sm);
-  transition: all var(--transition-fast);
+  color: var(--color-text-tertiary);
   font-size: 1.5rem;
-  line-height: 1;
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
 }
 
 .instructions-close:hover {
@@ -155,15 +153,16 @@
 }
 
 .instructions-title {
-  font-size: 1rem;
-  font-weight: 600;
+  font-size: 1.125rem;
+  font-weight: 700;
   color: var(--color-text);
-  margin-bottom: 1rem;
-  padding-right: 1.5rem;
+  margin: 0 0 1rem;
 }
 
 .instructions-list {
   list-style: none;
+  padding: 0;
+  margin: 0;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
@@ -270,17 +269,6 @@
   border: 1px solid var(--color-border);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-md);
-}
-
-.react-flow__handle {
-  width: 8px;
-  height: 8px;
-  background-color: var(--color-primary);
-  border: 2px solid var(--color-bg);
-}
-
-.react-flow__handle:hover {
-  background-color: var(--color-primary-hover);
 }
 
 /* ========== 반응형 ========== */

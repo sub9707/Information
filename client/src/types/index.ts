@@ -1,4 +1,6 @@
+// ============================================
 // 페이지 구조 타입
+// ============================================
 export interface PageNode {
   id: string
   title: string
@@ -14,7 +16,9 @@ export interface PagesData {
   dashboard: PageNode
 }
 
+// ============================================
 // API 정보 타입
+// ============================================
 export interface ApiParameter {
   type: string
   required?: boolean
@@ -57,7 +61,9 @@ export interface ApisData {
   [key: string]: ApiCategory
 }
 
+// ============================================
 // 통계 타입
+// ============================================
 export interface StatsData {
   pages: {
     site: number
@@ -74,7 +80,9 @@ export interface StatsData {
   }
 }
 
+// ============================================
 // API 응답 타입
+// ============================================
 export interface ApiResponse<T = any> {
   success: boolean
   data?: T
@@ -82,31 +90,71 @@ export interface ApiResponse<T = any> {
   timestamp?: string
 }
 
-// SQL 테이블 타입
+// ============================================
+// SQL 데이터베이스 타입
+// ============================================
+
+// 테이블 카테고리
+export type TableCategory = 
+  | 'core'       // 핵심 사용자 및 인증
+  | 'event'      // 이벤트 및 참여
+  | 'content'    // 콘텐츠 관리
+  | 'analytics'  // 분석 및 통계
+  | 'security'   // 보안 및 제한
+  | 'admin'      // 관리자 기능
+
+// 컬럼 정보
 export interface ColumnInfo {
   name: string
   type: string
-  key: string
+  nullable: boolean
+  comment?: string | null
+  default?: string | null
 }
 
+// 카테고리 정보
+export interface CategoryInfo {
+  key: TableCategory
+  label: string
+  description: string
+  color: string
+  icon: string
+}
+
+// 테이블 관계 정보
+export interface TableRelationship {
+  from: string
+  to: string
+  type: 'foreign_key' | 'reference'
+  columns: string[]
+}
+
+// 테이블 정보
 export interface TableInfo {
   description: string
-  category: string
+  category: TableCategory
   columns: ColumnInfo[]
-  sampleData: Record<string, any>[]
+  primaryKeys: string[]
   relationships: string[]
+  columnCount: number
+  sampleData?: Record<string, any>[]  // 샘플 데이터 추가
 }
 
+// 전체 테이블 데이터
 export interface TablesData {
   [tableName: string]: TableInfo
 }
 
+// React Flow용 테이블 노드 데이터
 export interface TableNodeData {
-  label: string
   tableName: string
+  displayName: string
   description: string
-  category: string
+  category: TableCategory
   columns: ColumnInfo[]
-  sampleData: Record<string, any>[]
+  primaryKeys: string[]
+  foreignKeys: string[]
   relationships: string[]
+  columnCount: number
+  sampleData?: Record<string, any>[]  // 샘플 데이터 추가
 }

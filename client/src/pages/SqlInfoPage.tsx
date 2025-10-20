@@ -1,144 +1,39 @@
-import React, { useEffect, useState, useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import ReactFlow, {
-  Node,
-  Edge,
   Background,
   Controls,
   MiniMap,
   useNodesState,
   useEdgesState,
-  MarkerType,
   ReactFlowInstance,
+  NodeMouseHandler
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { getTables } from '@/utils/api'
-import { TablesData, TableNodeData } from '@/types'
+import { useDatabase } from '@/hooks/useDatabase'
+import { CATEGORY_FILTERS } from '@/constants/database'
 import TableNode from '@/components/TableNode'
 import './SqlInfoPage.css'
 
 const nodeTypes = {
-  tableNode: TableNode,
+  tableNode: TableNode
 }
 
-const SqlInfoPage: React.FC = () => {
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
-  const [selectedCategory, setSelectedCategory] = useState<string>('all')
-  const [showInstructions, setShowInstructions] = useState(false)
-  const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null)
+const SqlInfoPage = () => {
+  const {
+    loading,
+    error,
+    nodes: initialNodes,
+    edges: initialEdges,
+    selectedCategory,
+    setSelectedCategory
+  } = useDatabase()
+
   const [nodes, setNodes, onNodesChange] = useNodesState([])
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
+  const [showInstructions, setShowInstructions] = useState(false)
+  const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null)
 
-  const createNodesAndEdges = useCallback((data: TablesData, category: string) => {
-    const nodes: Node[] = []
-    const edges: Edge[] = []
-    
-    // 카테고리 필터링
-    const filteredTables = category === 'all' 
-      ? Object.entries(data)
-      : Object.entries(data).filter(([_, table]) => table.category === category)
-
-    // 카테고리별 그룹화
-    const categorizedTables = filteredTables.reduce((acc, [name, table]) => {
-      if (!acc[table.category]) {
-        acc[table.category] = []
-      }
-      acc[table.category].push({ name, ...table })
-      return acc
-    }, {} as Record<string, any[]>)
-
-    // 레이아웃 설정
-    const HORIZONTAL_SPACING = 320
-    const VERTICAL_SPACING = 200
-    const CATEGORY_VERTICAL_SPACING = 100
-    const START_X = 100
-    let currentY = 50
-
-    // 카테고리별로 노드 배치
-    Object.entries(categorizedTables).forEach(([cat, tables]) => {
-      const tablesPerRow = 3
-      const rows = Math.ceil(tables.length / tablesPerRow)
-      
-      tables.forEach((table, index) => {
-        const row = Math.floor(index / tablesPerRow)
-        const col = index % tablesPerRow
-        
-        const x = START_X + (col * HORIZONTAL_SPACING)
-        const y = currentY + (row * VERTICAL_SPACING)
-
-        const nodeId = table.name
-
-        nodes.push({
-          id: nodeId,
-          type: 'tableNode',
-          position: { x, y },
-          data: {
-            label: table.name,
-            tableName: table.name,
-            description: table.description,
-            category: table.category,
-            columns: table.columns,
-            sampleData: table.sampleData,
-            relationships: table.relationships,
-          } as TableNodeData,
-        })
-
-        // 관계 엣지 생성
-        table.relationships.forEach((relatedTable: string) => {
-          if (filteredTables.some(([name]) => name === relatedTable)) {
-            edges.push({
-              id: `edge-${nodeId}-${relatedTable}`,
-              source: nodeId,
-              target: relatedTable,
-              type: 'smoothstep',
-              animated: true,
-              markerEnd: {
-                type: MarkerType.ArrowClosed,
-                color: '#3b82f6',
-              },
-              style: {
-                stroke: '#3b82f6',
-                strokeWidth: 2,
-              },
-            })
-          }
-        })
-      })
-
-      currentY += (rows * VERTICAL_SPACING) + CATEGORY_VERTICAL_SPACING
-    })
-
-    return { nodes, edges }
-  }, [])
-
-  useEffect(() => {
-    const fetchTables = async () => {
-      setLoading(true)
-      setError(null)
-
-      try {
-        const response = await getTables()
-
-        if (response.success && response.data) {
-          const { nodes: newNodes, edges: newEdges } = createNodesAndEdges(
-            response.data,
-            selectedCategory
-          )
-          setNodes(newNodes)
-          setEdges(newEdges)
-        } else {
-          setError(response.error || 'SQL 테이블 데이터를 불러오는데 실패했습니다.')
-        }
-      } catch (err) {
-        setError('네트워크 오류가 발생했습니다.')
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchTables()
-  }, [selectedCategory, createNodesAndEdges, setNodes, setEdges])
-
+  // 초기 노드/엣지가 로드되면 상태 업데이트
   const onInit = useCallback((instance: ReactFlowInstance) => {
     reactFlowInstanceRef.current = instance
     setTimeout(() => {
@@ -146,16 +41,26 @@ const SqlInfoPage: React.FC = () => {
     }, 100)
   }, [])
 
-  const categories = [
-    { value: 'all', label: '전체' },
-    { value: 'core', label: '핵심' },
-    { value: 'auth', label: '인증' },
-    { value: 'event', label: '이벤트' },
-    { value: 'content', label: '콘텐츠' },
-    { value: 'analytics', label: '분석' },
-    { value: 'security', label: '보안' },
-    { value: 'admin', label: '관리자' },
-  ]
+  // initialNodes가 변경될 때마다 nodes 업데이트
+  if (initialNodes.length > 0 && (nodes.length === 0 || nodes !== initialNodes)) {
+    setNodes(initialNodes)
+  }
+
+  // initialEdges가 변경될 때마다 edges 업데이트
+  if (initialEdges.length > 0 && (edges.length === 0 || edges !== initialEdges)) {
+    setEdges(initialEdges)
+  }
+
+  // 노드 클릭 시 포커스
+  const onNodeClick: NodeMouseHandler = useCallback((_, node) => {
+    if (reactFlowInstanceRef.current) {
+      reactFlowInstanceRef.current.fitView({
+        padding: 0.3,
+        duration: 400,
+        nodes: [node]
+      })
+    }
+  }, [])
 
   if (loading) {
     return (
@@ -189,11 +94,16 @@ const SqlInfoPage: React.FC = () => {
           </div>
           <div className="header-controls">
             <div className="category-selector">
-              {categories.map((cat) => (
+              {CATEGORY_FILTERS.map((cat) => (
                 <button
                   key={cat.value}
                   onClick={() => setSelectedCategory(cat.value)}
                   className={`category-button ${selectedCategory === cat.value ? 'active' : ''}`}
+                  style={
+                    selectedCategory === cat.value
+                      ? { backgroundColor: cat.color, borderColor: cat.color }
+                      : {}
+                  }
                 >
                   {cat.label}
                 </button>
@@ -221,10 +131,11 @@ const SqlInfoPage: React.FC = () => {
           </button>
           <h3 className="instructions-title">사용 안내</h3>
           <ul className="instructions-list">
-            <li>테이블 노드에 마우스를 올리면 컬럼 정보와 샘플 데이터를 확인할 수 있습니다</li>
-            <li>화살표는 테이블 간의 관계(Foreign Key)를 나타냅니다</li>
+            <li>테이블 노드에 마우스를 올리면 상세 컬럼 정보를 확인할 수 있습니다</li>
+            <li>화살표는 테이블 간의 외래키 관계를 나타냅니다</li>
             <li>카테고리 버튼으로 특정 그룹의 테이블만 필터링할 수 있습니다</li>
             <li>마우스 휠로 확대/축소, 드래그로 이동할 수 있습니다</li>
+            <li>테이블을 클릭하면 해당 테이블로 포커스됩니다</li>
           </ul>
         </div>
       )}
@@ -236,28 +147,26 @@ const SqlInfoPage: React.FC = () => {
           onNodesChange={onNodesChange}
           onEdgesChange={onEdgesChange}
           onInit={onInit}
+          onNodeClick={onNodeClick}
           nodeTypes={nodeTypes}
           fitView
           minZoom={0.1}
           maxZoom={1.5}
+          defaultEdgeOptions={{
+            animated: true
+          }}
         >
           <Background color="#e5e7eb" gap={16} />
           <Controls />
           <MiniMap
             nodeColor={(node) => {
-              const data = node.data as TableNodeData
-              const colors: Record<string, string> = {
-                core: '#3b82f6',
-                auth: '#10b981',
-                event: '#f59e0b',
-                content: '#8b5cf6',
-                analytics: '#06b6d4',
-                security: '#ef4444',
-                admin: '#ec4899',
-              }
-              return colors[data.category] || '#3b82f6'
+              const data = node.data as any
+              return CATEGORY_FILTERS.find(cat => cat.value === data.category)?.color || '#6b7280'
             }}
             maskColor="rgba(0, 0, 0, 0.1)"
+            style={{
+              backgroundColor: 'var(--color-bg-secondary)'
+            }}
           />
         </ReactFlow>
       </div>

@@ -3,1147 +3,951 @@
     "description": "사용자 기본 정보",
     "category": "core",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "name",
-        "type": "varchar(50)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "username",
-        "type": "varchar(30)",
-        "key": "UNI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "phone",
-        "type": "varchar(15)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "email",
-        "type": "varchar(100)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "role",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "name", "type": "varchar(50)", "nullable": false },
+      { "name": "username", "type": "varchar(30)", "nullable": false },
+      { "name": "company", "type": "varchar(100)", "nullable": true },
+      { "name": "password_hash", "type": "varchar(128)", "nullable": false },
+      { "name": "password_salt", "type": "varchar(32)", "nullable": false },
+      { "name": "gender", "type": "enum('male','female')", "nullable": false },
+      { "name": "birth_date", "type": "date", "nullable": false },
+      { "name": "phone", "type": "varchar(15)", "nullable": false },
+      { "name": "address", "type": "varchar(200)", "nullable": true, "comment": "기본주소" },
+      { "name": "address_detail", "type": "varchar(100)", "nullable": true, "comment": "상세주소" },
+      { "name": "zip_code", "type": "varchar(10)", "nullable": true, "comment": "우편번호" },
+      { "name": "role", "type": "enum('admin','user')", "nullable": false },
+      { "name": "session_token", "type": "varchar(64)", "nullable": true },
+      { "name": "session_expires_at", "type": "timestamp", "nullable": true },
+      { "name": "last_login_at", "type": "timestamp", "nullable": true },
+      { "name": "last_activity_at", "type": "timestamp", "nullable": true },
+      { "name": "last_login_ip", "type": "varchar(45)", "nullable": true, "comment": "마지막 로그인 IP" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true },
+      { "name": "signup_method", "type": "enum('phone','social')", "nullable": false, "comment": "가입 방법" },
+      { "name": "email", "type": "varchar(100)", "nullable": true, "comment": "SNS에서 가져온 이메일" },
+      { "name": "profile_image", "type": "text", "nullable": true, "comment": "SNS에서 가져온 프로필 이미지" }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["registrations", "social_accounts", "user_consents", "event_participations", "writings", "support_comments"],
+    "columnCount": 23,
     "sampleData": [
       {
         "id": "user-001",
         "name": "홍길동",
         "username": "hong123",
+        "company": "테크컴퍼니",
+        "gender": "male",
+        "birth_date": "1990-05-15",
         "phone": "01012345678",
-        "email": "hong@example.com",
-        "role": "user"
+        "password_hash": "hashed_password_1",
+        "password_salt": "salt_1",
+        "role": "user",
+        "signup_method": "phone",
+        "created_at": "2025-01-10 14:23:00"
       },
       {
         "id": "user-002",
-        "name": "김철수",
+        "name": "김영희",
         "username": "kim456",
+        "company": null,
+        "gender": "female",
+        "birth_date": "1995-08-22",
         "phone": "01087654321",
-        "email": "kim@example.com",
-        "role": "user"
+        "password_hash": "hashed_password_2",
+        "password_salt": "salt_2",
+        "role": "user",
+        "signup_method": "social",
+        "created_at": "2025-01-12 09:15:00"
       },
       {
         "id": "admin-001",
         "name": "관리자",
         "username": "admin",
+        "company": "모두하나",
+        "gender": "male",
+        "birth_date": "1985-03-10",
         "phone": "01000000000",
-        "email": "admin@example.com",
-        "role": "admin"
+        "password_hash": "hashed_admin_password",
+        "password_salt": "admin_salt",
+        "role": "admin",
+        "signup_method": "phone",
+        "created_at": "2024-12-01 00:00:00"
       }
-    ],
-    "relationships": [
-      {
-        "table": "registrations",
-        "local_column": null,
-        "foreign_column": null
-      },
-      {
-        "table": "social_accounts",
-        "local_column": null,
-        "foreign_column": null
-      },
-      {
-        "table": "user_consents",
-        "local_column": null,
-        "foreign_column": null
-      },
-      {
-        "table": "event_participations",
-        "local_column": null,
-        "foreign_column": null
-      },
-      {
-        "table": "writings",
-        "local_column": null,
-        "foreign_column": null
-      }
-    ],
-    "indexes": [],
-    "constraints": []
-  },
-  "registrations": {
-    "description": "축제 참가 신청",
-    "category": "event",
-    "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "UNI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "registration_number",
-        "type": "varchar(20)",
-        "key": "UNI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "participant_type",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "status",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
-    ],
-    "sampleData": [
-      {
-        "id": "reg-001",
-        "user_id": "user-001",
-        "registration_number": "2025-0001",
-        "participant_type": "citizen",
-        "status": "confirmed"
-      },
-      {
-        "id": "reg-002",
-        "user_id": "user-002",
-        "registration_number": "2025-0002",
-        "participant_type": "volunteer",
-        "status": "confirmed"
-      }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "social_accounts": {
-    "description": "소셜 로그인 연동",
-    "category": "auth",
+    "description": "소셜 계정 연동 정보",
+    "category": "core",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "provider",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "provider_id",
-        "type": "varchar(100)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "provider", "type": "enum('naver','kakao','google')", "nullable": false },
+      { "name": "provider_id", "type": "varchar(100)", "nullable": false },
+      { "name": "provider_email", "type": "varchar(100)", "nullable": true },
+      { "name": "provider_name", "type": "varchar(50)", "nullable": true },
+      { "name": "provider_profile_image", "type": "text", "nullable": true },
+      { "name": "access_token", "type": "text", "nullable": true },
+      { "name": "refresh_token", "type": "text", "nullable": true },
+      { "name": "token_expires_at", "type": "timestamp", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 12,
     "sampleData": [
       {
         "id": "social-001",
-        "user_id": "user-001",
-        "provider": "kakao",
-        "provider_id": "kakao-123456"
-      },
-      {
-        "id": "social-002",
         "user_id": "user-002",
-        "provider": "naver",
-        "provider_id": "naver-789012"
+        "provider": "kakao",
+        "provider_id": "kakao-12345",
+        "provider_email": "kim456@kakao.com",
+        "provider_name": "김영희",
+        "access_token": "kakao_access_token_abc",
+        "created_at": "2025-01-12 09:15:00"
       }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "user_consents": {
-    "description": "사용자 동의 정보",
-    "category": "auth",
+    "description": "사용자 약관 동의 정보",
+    "category": "core",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "UNI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "privacy_consent",
-        "type": "tinyint(1)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "marketing_consent",
-        "type": "tinyint(1)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "privacy_consent", "type": "tinyint(1)", "nullable": false, "comment": "개인정보처리방침 동의" },
+      { "name": "marketing_consent", "type": "tinyint(1)", "nullable": false, "comment": "마케팅 정보 수신 동의" },
+      { "name": "data_collection_consent", "type": "tinyint(1)", "nullable": false, "comment": "개인정보 수집 동의" },
+      { "name": "data_retention_consent", "type": "tinyint(1)", "nullable": false, "comment": "개인정보 보관기간 동의" },
+      { "name": "third_party_consent", "type": "tinyint(1)", "nullable": false, "comment": "제3자 제공 동의" },
+      { "name": "anti_cheat_consent", "type": "tinyint(1)", "nullable": false, "comment": "부정 참여 방지 동의" },
+      { "name": "consent_version", "type": "varchar(20)", "nullable": true, "comment": "약관 버전" },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": true, "comment": "동의 시 IP" },
+      { "name": "user_agent", "type": "text", "nullable": true, "comment": "동의 시 브라우저 정보" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 13,
     "sampleData": [
       {
         "id": "consent-001",
         "user_id": "user-001",
         "privacy_consent": 1,
-        "marketing_consent": 1
-      },
-      {
-        "id": "consent-002",
-        "user_id": "user-002",
-        "privacy_consent": 1,
-        "marketing_consent": 0
+        "marketing_consent": 0,
+        "data_collection_consent": 1,
+        "data_retention_consent": 1,
+        "third_party_consent": 0,
+        "anti_cheat_consent": 1,
+        "consent_version": "v1.2",
+        "ip_address": "192.168.0.1",
+        "created_at": "2025-01-10 14:23:00"
       }
+    ]
+  },
+  "registrations": {
+    "description": "행사 참가 신청 정보",
+    "category": "core",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "registration_number", "type": "varchar(20)", "nullable": false, "comment": "신청번호" },
+      { "name": "participant_type", "type": "enum('citizen','outsider')", "nullable": false, "comment": "참가자 유형" },
+      { "name": "companions", "type": "int", "nullable": false, "comment": "동반자 수" },
+      { "name": "companion_details", "type": "text", "nullable": true, "comment": "동반자 상세정보" },
+      { "name": "address", "type": "varchar(200)", "nullable": false, "comment": "경품 수령 주소" },
+      { "name": "address_detail", "type": "varchar(100)", "nullable": true, "comment": "상세주소" },
+      { "name": "zip_code", "type": "varchar(10)", "nullable": false, "comment": "우편번호" },
+      { "name": "special_requests", "type": "text", "nullable": true, "comment": "특별 요청사항" },
+      { "name": "marketing_consent", "type": "tinyint(1)", "nullable": false, "comment": "마케팅 수신 동의" },
+      { "name": "privacy_consent", "type": "tinyint(1)", "nullable": false, "comment": "개인정보 수집동의" },
+      { "name": "status", "type": "enum('pending','confirmed','cancelled')", "nullable": false, "comment": "신청상태" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 15,
+    "sampleData": [
+      {
+        "id": "reg-001",
+        "user_id": "user-001",
+        "registration_number": "R20250110001",
+        "participant_type": "citizen",
+        "companions": 1,
+        "address": "서울시 강남구",
+        "zip_code": "06164",
+        "marketing_consent": 1,
+        "privacy_consent": 1,
+        "status": "confirmed",
+        "created_at": "2025-01-10 15:00:00"
+      }
+    ]
   },
   "event_participations": {
     "description": "이벤트 참여 기록",
     "category": "event",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "participation_date",
-        "type": "date",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "participated_at", "type": "timestamp", "nullable": false },
+      { "name": "participation_date", "type": "date", "nullable": false, "comment": "참여 날짜 (일일 제한용)" },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": true },
+      { "name": "user_agent", "type": "text", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users", "event_winners"],
+    "columnCount": 6,
     "sampleData": [
       {
-        "id": "part-001",
+        "id": "event-part-001",
         "user_id": "user-001",
-        "participation_date": "2025-01-15"
-      },
-      {
-        "id": "part-002",
-        "user_id": "user-002",
-        "participation_date": "2025-01-16"
+        "participated_at": "2025-03-01 10:00:00",
+        "participation_date": "2025-03-01",
+        "ip_address": "203.0.113.42"
       }
-    ],
-    "relationships": [
-      {
-        "table": "event_winners",
-        "local_column": null,
-        "foreign_column": null
-      }
-    ],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "event_winners": {
-    "description": "이벤트 당첨자",
+    "description": "이벤트 당첨자 정보",
     "category": "event",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "participation_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "prize_id",
-        "type": "int(11)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "participation_id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "prize_id", "type": "int", "nullable": false },
+      { "name": "won_at", "type": "timestamp", "nullable": false },
+      { "name": "is_claimed", "type": "tinyint(1)", "nullable": false, "comment": "수령 여부" },
+      { "name": "claimed_at", "type": "timestamp", "nullable": true },
+      { "name": "notes", "type": "text", "nullable": true, "comment": "관리자 메모" }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["event_participations", "users", "prizes"],
+    "columnCount": 8,
     "sampleData": [
       {
         "id": "winner-001",
-        "participation_id": "part-001",
+        "participation_id": "event-part-001",
         "user_id": "user-001",
-        "prize_id": 1
+        "prize_id": 101,
+        "won_at": "2025-03-01 10:00:05",
+        "is_claimed": 0
       }
+    ]
+  },
+  "event_settings": {
+    "description": "이벤트 설정",
+    "category": "event",
+    "columns": [
+      { "name": "id", "type": "int", "nullable": false },
+      { "name": "setting_key", "type": "varchar(100)", "nullable": false },
+      { "name": "setting_value", "type": "text", "nullable": false },
+      { "name": "description", "type": "varchar(255)", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
-    "relationships": [
+    "primaryKeys": ["id"],
+    "relationships": [],
+    "columnCount": 5,
+    "sampleData": [
       {
-        "table": "prizes",
-        "local_column": null,
-        "foreign_column": null
+        "id": 1,
+        "setting_key": "daily_limit",
+        "setting_value": "1",
+        "description": "일일 참여 제한 횟수",
+        "updated_at": "2025-01-01 12:00:00"
       }
-    ],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "prizes": {
     "description": "경품 정보",
     "category": "event",
     "columns": [
-      {
-        "name": "id",
-        "type": "int(11)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "name",
-        "type": "varchar(100)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "type",
-        "type": "enum",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "value",
-        "type": "decimal(10,2)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "int", "nullable": false },
+      { "name": "name", "type": "varchar(100)", "nullable": false, "comment": "상품명" },
+      { "name": "description", "type": "varchar(255)", "nullable": true, "comment": "상품 설명" },
+      { "name": "icon", "type": "varchar(10)", "nullable": false, "comment": "이모지 아이콘" },
+      { "name": "color", "type": "varchar(7)", "nullable": false, "comment": "HEX 컬러 코드" },
+      { "name": "type", "type": "enum('giftcard','physical','point')", "nullable": false, "comment": "상품 타입" },
+      { "name": "value", "type": "decimal(10,2)", "nullable": true, "comment": "상품 가격" },
+      { "name": "initial_quantity", "type": "int", "nullable": false, "comment": "초기 수량" },
+      { "name": "current_quantity", "type": "int", "nullable": false, "comment": "현재 수량" },
+      { "name": "is_active", "type": "tinyint(1)", "nullable": false, "comment": "활성 상태" },
+      { "name": "sort_order", "type": "int", "nullable": false, "comment": "정렬 순서" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["prize_probabilities", "event_winners"],
+    "columnCount": 13,
+    "sampleData": [
+      {
+        "id": 101,
+        "name": "스타벅스 커피 쿠폰",
+        "icon": "☕",
+        "color": "#00704A",
+        "type": "giftcard",
+        "value": 4500.00,
+        "initial_quantity": 100,
+        "current_quantity": 99,
+        "is_active": 1,
+        "sort_order": 1,
+        "created_at": "2025-01-01 00:00:00"
+      }
+    ]
+  },
+  "prize_probabilities": {
+    "description": "경품 당첨 확률 설정",
+    "category": "event",
+    "columns": [
+      { "name": "id", "type": "int", "nullable": false },
+      { "name": "prize_id", "type": "int", "nullable": false },
+      { "name": "probability", "type": "decimal(5,2)", "nullable": false, "comment": "확률 (%)" },
+      { "name": "min_probability", "type": "decimal(5,2)", "nullable": false, "comment": "최소 확률" },
+      { "name": "max_probability", "type": "decimal(5,2)", "nullable": false, "comment": "최대 확률" },
+      { "name": "is_active", "type": "tinyint(1)", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
+    ],
+    "primaryKeys": ["id"],
+    "relationships": ["prizes"],
+    "columnCount": 8,
     "sampleData": [
       {
         "id": 1,
-        "name": "스타벅스 기프티콘",
-        "type": "giftcard",
-        "value": 5000.0
-      },
-      {
-        "id": 2,
-        "name": "CU 편의점 기프티콘",
-        "type": "giftcard",
-        "value": 3000.0
+        "prize_id": 101,
+        "probability": 5.00,
+        "min_probability": 3.00,
+        "max_probability": 10.00,
+        "is_active": 1,
+        "created_at": "2025-01-01 00:00:00"
       }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "quiz_event_participants": {
-    "description": "퀴즈 이벤트 참여",
+    "description": "퀴즈 이벤트 참여자",
     "category": "event",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "quiz_version",
-        "type": "varchar(20)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "perfect_score",
-        "type": "tinyint(1)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false, "comment": "참여자 사용자 ID" },
+      { "name": "quiz_version", "type": "varchar(20)", "nullable": false, "comment": "퀴즈 버전 관리" },
+      { "name": "perfect_score", "type": "tinyint(1)", "nullable": false, "comment": "만점 여부" },
+      { "name": "total_questions", "type": "int", "nullable": false, "comment": "총 문제 수" },
+      { "name": "correct_answers", "type": "int", "nullable": false, "comment": "정답 수" },
+      { "name": "completion_time", "type": "int", "nullable": false, "comment": "완료 시간 (초)" },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": true, "comment": "참여 시 IP 주소" },
+      { "name": "user_agent", "type": "text", "nullable": true, "comment": "참여 시 브라우저 정보" },
+      { "name": "participated_at", "type": "timestamp", "nullable": true, "comment": "참여 일시" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 12,
     "sampleData": [
       {
-        "id": "quiz-001",
+        "id": "quiz-part-001",
         "user_id": "user-001",
-        "quiz_version": "v1",
-        "perfect_score": 1
-      },
-      {
-        "id": "quiz-002",
-        "user_id": "user-002",
-        "quiz_version": "v1",
-        "perfect_score": 0
+        "quiz_version": "v1.0",
+        "perfect_score": 1,
+        "total_questions": 5,
+        "correct_answers": 5,
+        "completion_time": 45,
+        "participated_at": "2025-03-15 11:30:00"
       }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
-  "writings": {
-    "description": "사용자 글쓰기",
+  "news_items": {
+    "description": "뉴스 및 공지사항",
     "category": "content",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "topic",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "title",
-        "type": "varchar(100)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "content",
-        "type": "text",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(255)", "nullable": false },
+      { "name": "title", "type": "varchar(500)", "nullable": false },
+      { "name": "category", "type": "varchar(100)", "nullable": false },
+      { "name": "date", "type": "datetime", "nullable": false },
+      { "name": "summary", "type": "text", "nullable": true },
+      { "name": "content", "type": "longtext", "nullable": false },
+      { "name": "content_type", "type": "enum('text','html','markdown')", "nullable": true },
+      { "name": "views", "type": "int", "nullable": true },
+      { "name": "important", "type": "tinyint(1)", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["news_attachments", "news_editor_images"],
+    "columnCount": 11,
+    "sampleData": [
+      {
+        "id": "news-20250401",
+        "title": "2025년 봄맞이 이벤트 안내",
+        "category": "공지사항",
+        "date": "2025-04-01 09:00:00",
+        "summary": "봄맞이 특별 이벤트가 시작됩니다.",
+        "content": "자세한 내용은 본문을 확인해 주세요.",
+        "content_type": "text",
+        "views": 150,
+        "important": 1,
+        "created_at": "2025-03-31 18:00:00"
+      }
+    ]
+  },
+  "news_attachments": {
+    "description": "뉴스 첨부파일",
+    "category": "content",
+    "columns": [
+      { "name": "id", "type": "varchar(255)", "nullable": false },
+      { "name": "news_id", "type": "varchar(255)", "nullable": false },
+      { "name": "original_filename", "type": "varchar(500)", "nullable": false },
+      { "name": "stored_filename", "type": "varchar(500)", "nullable": false },
+      { "name": "file_path", "type": "varchar(1000)", "nullable": false },
+      { "name": "file_size", "type": "bigint", "nullable": false },
+      { "name": "mime_type", "type": "varchar(255)", "nullable": false },
+      { "name": "file_extension", "type": "varchar(10)", "nullable": true },
+      { "name": "display_order", "type": "int", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true }
+    ],
+    "primaryKeys": ["id"],
+    "relationships": ["news_items"],
+    "columnCount": 10,
+    "sampleData": [
+      {
+        "id": "attach-001",
+        "news_id": "news-20250401",
+        "original_filename": "event_plan.pdf",
+        "stored_filename": "st_event_plan_123.pdf",
+        "file_path": "/uploads/news/2025/st_event_plan_123.pdf",
+        "file_size": 102400,
+        "mime_type": "application/pdf",
+        "file_extension": "pdf",
+        "display_order": 1,
+        "created_at": "2025-03-31 18:00:00"
+      }
+    ]
+  },
+  "news_editor_images": {
+    "description": "뉴스 에디터 이미지",
+    "category": "content",
+    "columns": [
+      { "name": "id", "type": "varchar(255)", "nullable": false },
+      { "name": "news_id", "type": "varchar(255)", "nullable": false },
+      { "name": "original_filename", "type": "varchar(500)", "nullable": false },
+      { "name": "stored_filename", "type": "varchar(500)", "nullable": false },
+      { "name": "file_path", "type": "varchar(1000)", "nullable": false },
+      { "name": "file_size", "type": "bigint", "nullable": false },
+      { "name": "width", "type": "int", "nullable": true },
+      { "name": "height", "type": "int", "nullable": true },
+      { "name": "alt_text", "type": "text", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true }
+    ],
+    "primaryKeys": ["id"],
+    "relationships": ["news_items"],
+    "columnCount": 10,
+    "sampleData": [
+      {
+        "id": "image-001",
+        "news_id": "news-20250401",
+        "original_filename": "main_banner.jpg",
+        "stored_filename": "img_banner_456.jpg",
+        "file_path": "/uploads/news/2025/img_banner_456.jpg",
+        "file_size": 204800,
+        "width": 800,
+        "height": 400,
+        "alt_text": "이벤트 메인 이미지",
+        "created_at": "2025-03-31 18:00:00"
+      }
+    ]
+  },
+  "writings": {
+    "description": "사용자 작성 글",
+    "category": "content",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "topic", "type": "enum('가족에게','친구에게','연인에게','자신에게')", "nullable": false },
+      { "name": "title", "type": "varchar(100)", "nullable": false },
+      { "name": "content", "type": "text", "nullable": false },
+      { "name": "likes_count", "type": "int", "nullable": false },
+      { "name": "is_featured", "type": "tinyint(1)", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
+    ],
+    "primaryKeys": ["id"],
+    "relationships": ["users", "writing_likes"],
+    "columnCount": 9,
     "sampleData": [
       {
         "id": "writing-001",
-        "user_id": "user-001",
-        "topic": "가족에게 전하고 싶은 말",
-        "title": "사랑합니다",
-        "content": "항상 건강하세요..."
-      },
-      {
-        "id": "writing-002",
         "user_id": "user-002",
-        "topic": "가족과 함께해서 즐거웠던 순간",
-        "title": "여행 추억",
-        "content": "작년 여름 제주도..."
+        "topic": "자신에게",
+        "title": "미래의 나에게 쓰는 편지",
+        "content": "5년 후에도 이 열정을 잃지 않기를 바라.",
+        "likes_count": 5,
+        "is_featured": 1,
+        "created_at": "2025-02-01 10:30:00"
       }
-    ],
-    "relationships": [
-      {
-        "table": "writing_likes",
-        "local_column": null,
-        "foreign_column": null
-      }
-    ],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "writing_likes": {
     "description": "글 좋아요",
     "category": "content",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "writing_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "writing_id", "type": "varchar(36)", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users", "writings"],
+    "columnCount": 4,
     "sampleData": [
       {
-        "id": "like-001",
-        "user_id": "user-002",
-        "writing_id": "writing-001"
+        "id": "like-w-001",
+        "user_id": "user-001",
+        "writing_id": "writing-001",
+        "created_at": "2025-02-01 11:00:00"
       }
+    ]
+  },
+  "writing_topics": {
+    "description": "글쓰기 주제 관리",
+    "category": "content",
+    "columns": [
+      { "name": "id", "type": "int", "nullable": false },
+      { "name": "title", "type": "varchar(100)", "nullable": false },
+      { "name": "description", "type": "text", "nullable": false },
+      { "name": "deadline", "type": "date", "nullable": false },
+      { "name": "examples", "type": "longtext", "nullable": false },
+      { "name": "is_active", "type": "tinyint(1)", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
     "relationships": [],
-    "indexes": [],
-    "constraints": []
+    "columnCount": 7,
+    "sampleData": [
+      {
+        "id": 1,
+        "title": "가장 소중한 기억",
+        "description": "가족과 함께한 가장 행복했던 순간을 기록해 보세요.",
+        "deadline": "2025-05-30",
+        "examples": "예시 1: 여행, 예시 2: 생일 파티",
+        "is_active": 1,
+        "created_at": "2025-01-01 00:00:00"
+      }
+    ]
   },
   "support_comments": {
     "description": "응원 메시지",
     "category": "content",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "message",
-        "type": "text",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "likes",
-        "type": "int(11)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "message", "type": "text", "nullable": false },
+      { "name": "likes", "type": "int", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users", "support_comment_likes"],
+    "columnCount": 6,
     "sampleData": [
       {
-        "id": "support-001",
+        "id": "comment-001",
         "user_id": "user-001",
-        "message": "모두 화이팅!",
-        "likes": 10
-      },
-      {
-        "id": "support-002",
-        "user_id": "user-002",
-        "message": "행복한 하루 되세요",
-        "likes": 5
+        "message": "힘내세요! 당신을 응원합니다.",
+        "likes": 3,
+        "created_at": "2025-02-15 14:00:00"
       }
-    ],
-    "relationships": [
-      {
-        "table": "support_comment_likes",
-        "local_column": null,
-        "foreign_column": null
-      }
-    ],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "support_comment_likes": {
     "description": "응원 메시지 좋아요",
     "category": "content",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "comment_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "comment_id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id", "type": "varchar(36)", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["support_comments", "users"],
+    "columnCount": 4,
     "sampleData": [
       {
-        "id": "clike-001",
-        "comment_id": "support-001",
-        "user_id": "user-002"
+        "id": "like-c-001",
+        "comment_id": "comment-001",
+        "user_id": "user-002",
+        "created_at": "2025-02-15 14:05:00"
       }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
-  },
-  "news_items": {
-    "description": "공지사항",
-    "category": "content",
-    "columns": [
-      {
-        "name": "id",
-        "type": "varchar(255)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "title",
-        "type": "varchar(500)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "category",
-        "type": "varchar(100)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "content",
-        "type": "longtext",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "views",
-        "type": "int(10) unsigned",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
-    ],
-    "sampleData": [
-      {
-        "id": "news-001",
-        "title": "축제 일정 안내",
-        "category": "notice",
-        "content": "2025년 축제는...",
-        "views": 1500
-      },
-      {
-        "id": "news-002",
-        "title": "교통편 안내",
-        "category": "info",
-        "content": "축제장 오시는 길...",
-        "views": 800
-      }
-    ],
-    "relationships": [
-      {
-        "table": "news_attachments",
-        "local_column": null,
-        "foreign_column": null
-      },
-      {
-        "table": "news_editor_images",
-        "local_column": null,
-        "foreign_column": null
-      }
-    ],
-    "indexes": [],
-    "constraints": []
-  },
-  "news_attachments": {
-    "description": "공지사항 첨부파일",
-    "category": "content",
-    "columns": [
-      {
-        "name": "id",
-        "type": "varchar(255)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "news_id",
-        "type": "varchar(255)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "file_path",
-        "type": "varchar(1000)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
-    ],
-    "sampleData": [
-      {
-        "id": "attach-001",
-        "news_id": "news-001",
-        "file_path": "/uploads/schedule.pdf"
-      }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
-  },
-  "news_editor_images": {
-    "description": "공지사항 에디터 이미지",
-    "category": "content",
-    "columns": [
-      {
-        "name": "id",
-        "type": "varchar(255)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "news_id",
-        "type": "varchar(255)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "file_path",
-        "type": "varchar(1000)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
-    ],
-    "sampleData": [
-      {
-        "id": "image-001",
-        "news_id": "news-001",
-        "file_path": "/uploads/poster.jpg"
-      }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "page_analytics": {
-    "description": "페이지 분석",
+    "description": "페이지 방문 분석",
     "category": "analytics",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "page_path",
-        "type": "varchar(255)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "visitor_id",
-        "type": "varchar(64)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "device_type",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "page_path", "type": "varchar(255)", "nullable": false, "comment": "페이지 경로" },
+      { "name": "page_title", "type": "varchar(255)", "nullable": true, "comment": "페이지 제목" },
+      { "name": "visitor_id", "type": "varchar(64)", "nullable": false, "comment": "방문자 식별자" },
+      { "name": "session_id", "type": "varchar(64)", "nullable": false, "comment": "세션 식별자" },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": true, "comment": "IP 주소" },
+      { "name": "user_agent", "type": "text", "nullable": true, "comment": "브라우저 정보" },
+      { "name": "referrer", "type": "varchar(500)", "nullable": true, "comment": "리퍼러" },
+      { "name": "screen_resolution", "type": "varchar(20)", "nullable": true, "comment": "화면 해상도" },
+      { "name": "device_type", "type": "enum('desktop','mobile','tablet')", "nullable": true },
+      { "name": "browser_name", "type": "varchar(50)", "nullable": true },
+      { "name": "os_name", "type": "varchar(50)", "nullable": true },
+      { "name": "visit_duration", "type": "int", "nullable": true, "comment": "체류시간(초)" },
+      { "name": "is_bounce", "type": "tinyint(1)", "nullable": true, "comment": "바운스 여부" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": [],
+    "columnCount": 16,
     "sampleData": [
       {
-        "id": "ana-001",
-        "page_path": "/",
-        "visitor_id": "visitor-001",
-        "device_type": "mobile"
-      },
-      {
-        "id": "ana-002",
-        "page_path": "/news",
-        "visitor_id": "visitor-002",
-        "device_type": "desktop"
+        "id": "pa-001",
+        "page_path": "/main",
+        "page_title": "메인 페이지",
+        "visitor_id": "vis-111",
+        "session_id": "sess-aaa",
+        "ip_address": "10.0.0.1",
+        "device_type": "desktop",
+        "visit_duration": 60,
+        "is_bounce": 0,
+        "created_at": "2025-04-10 10:00:00"
       }
+    ]
+  },
+  "daily_page_stats": {
+    "description": "일별 페이지 통계",
+    "category": "analytics",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "page_path", "type": "varchar(255)", "nullable": false },
+      { "name": "date", "type": "date", "nullable": false },
+      { "name": "total_views", "type": "int", "nullable": true },
+      { "name": "unique_visitors", "type": "int", "nullable": true },
+      { "name": "avg_duration", "type": "decimal(8,2)", "nullable": true },
+      { "name": "bounce_rate", "type": "decimal(5,2)", "nullable": true },
+      { "name": "desktop_count", "type": "int", "nullable": true },
+      { "name": "mobile_count", "type": "int", "nullable": true },
+      { "name": "tablet_count", "type": "int", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
     "relationships": [],
-    "indexes": [],
-    "constraints": []
+    "columnCount": 12,
+    "sampleData": [
+      {
+        "id": "dps-001",
+        "page_path": "/main",
+        "date": "2025-04-10",
+        "total_views": 500,
+        "unique_visitors": 150,
+        "avg_duration": 45.50,
+        "bounce_rate": 30.25,
+        "desktop_count": 300,
+        "mobile_count": 180,
+        "tablet_count": 20,
+        "created_at": "2025-04-11 00:00:00"
+      }
+    ]
   },
   "phone_verifications": {
     "description": "전화번호 인증",
-    "category": "auth",
+    "category": "security",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "phone",
-        "type": "varchar(15)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "code",
-        "type": "varchar(6)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "verified",
-        "type": "tinyint(1)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "phone", "type": "varchar(15)", "nullable": false },
+      { "name": "code", "type": "varchar(6)", "nullable": false },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": false },
+      { "name": "user_agent", "type": "text", "nullable": true },
+      { "name": "attempt_count", "type": "int", "nullable": false },
+      { "name": "verified", "type": "tinyint(1)", "nullable": false },
+      { "name": "expires_at", "type": "timestamp", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": [],
+    "columnCount": 10,
     "sampleData": [
       {
-        "id": "verify-001",
-        "phone": "01012345678",
+        "id": "pv-001",
+        "phone": "01011112222",
         "code": "123456",
-        "verified": 1
-      },
-      {
-        "id": "verify-002",
-        "phone": "01087654321",
-        "code": "789012",
-        "verified": 0
+        "ip_address": "1.2.3.4",
+        "attempt_count": 1,
+        "verified": 0,
+        "expires_at": "2025-04-21 13:40:00",
+        "created_at": "2025-04-21 13:35:00"
       }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "email_verifications": {
     "description": "이메일 인증",
-    "category": "auth",
+    "category": "security",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "email",
-        "type": "varchar(100)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "code",
-        "type": "varchar(6)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "is_verified",
-        "type": "tinyint(1)",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "email", "type": "varchar(100)", "nullable": false },
+      { "name": "code", "type": "varchar(6)", "nullable": false, "comment": "인증 코드 (6자리)" },
+      { "name": "is_verified", "type": "tinyint(1)", "nullable": false },
+      { "name": "expires_at", "type": "timestamp", "nullable": false, "comment": "만료 시간" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "verified_at", "type": "timestamp", "nullable": true },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": [],
+    "columnCount": 8,
     "sampleData": [
       {
-        "id": "email-001",
-        "email": "hong@example.com",
-        "code": "ABC123",
-        "is_verified": 1
+        "id": "ev-001",
+        "email": "test@example.com",
+        "code": "654321",
+        "is_verified": 1,
+        "expires_at": "2025-04-21 13:45:00",
+        "created_at": "2025-04-21 13:40:00",
+        "verified_at": "2025-04-21 13:41:00"
       }
+    ]
+  },
+  "verification_limits": {
+    "description": "인증 횟수 제한",
+    "category": "security",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "identifier", "type": "varchar(100)", "nullable": false, "comment": "IP 주소 또는 전화번호" },
+      { "name": "type", "type": "enum('ip','phone')", "nullable": false },
+      { "name": "attempt_count", "type": "int", "nullable": false },
+      { "name": "last_attempt_at", "type": "timestamp", "nullable": false },
+      { "name": "blocked_until", "type": "timestamp", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
     "relationships": [],
-    "indexes": [],
-    "constraints": []
+    "columnCount": 8,
+    "sampleData": [
+      {
+        "id": "vl-001",
+        "identifier": "1.2.3.4",
+        "type": "ip",
+        "attempt_count": 3,
+        "last_attempt_at": "2025-04-21 13:37:00",
+        "created_at": "2025-04-21 13:30:00"
+      }
+    ]
+  },
+  "email_verification_limits": {
+    "description": "이메일 인증 제한",
+    "category": "security",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "email", "type": "varchar(100)", "nullable": false },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": false },
+      { "name": "attempt_count", "type": "int", "nullable": false },
+      { "name": "last_attempt_at", "type": "timestamp", "nullable": false },
+      { "name": "blocked_until", "type": "timestamp", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
+    ],
+    "primaryKeys": ["id"],
+    "relationships": [],
+    "columnCount": 8,
+    "sampleData": [
+      {
+        "id": "evl-001",
+        "email": "abuse@example.com",
+        "ip_address": "4.5.6.7",
+        "attempt_count": 5,
+        "last_attempt_at": "2025-04-21 13:50:00",
+        "blocked_until": "2025-04-21 14:50:00",
+        "created_at": "2025-04-21 13:40:00"
+      }
+    ]
   },
   "user_blacklist": {
-    "description": "차단된 사용자",
+    "description": "사용자 블랙리스트",
     "category": "security",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "phone_hash",
-        "type": "varchar(64)",
-        "key": "UNI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "blacklist_reason",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "phone_hash", "type": "varchar(64)", "nullable": false },
+      { "name": "email_hash", "type": "varchar(64)", "nullable": true },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": true },
+      { "name": "blacklist_reason", "type": "enum('excessive_signup_deletion','abuse','fraud')", "nullable": false },
+      { "name": "evidence_data", "type": "longtext", "nullable": true, "comment": "차단 근거 데이터" },
+      { "name": "blocked_until", "type": "timestamp", "nullable": true, "comment": "NULL이면 영구 차단" },
+      { "name": "created_by", "type": "varchar(36)", "nullable": true, "comment": "차단 처리한 관리자 ID" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 10,
     "sampleData": [
       {
-        "id": "black-001",
-        "phone_hash": "hash-abc123",
-        "blacklist_reason": "abuse"
+        "id": "bl-001",
+        "phone_hash": "hashed_phone_1234",
+        "email_hash": "hashed_email_abcd",
+        "blacklist_reason": "excessive_signup_deletion",
+        "blocked_until": null,
+        "created_by": "admin-001",
+        "created_at": "2025-04-10 12:00:00"
       }
-    ],
-    "relationships": [],
-    "indexes": [],
-    "constraints": []
+    ]
   },
   "account_deletions": {
-    "description": "탈퇴 기록",
+    "description": "계정 삭제 기록",
     "category": "security",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "user_id_hash",
-        "type": "varchar(64)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "deletion_reason",
-        "type": "enum",
-        "key": "",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "user_id_hash", "type": "varchar(64)", "nullable": false, "comment": "원본 user ID의 해시값" },
+      { "name": "phone_hash", "type": "varchar(64)", "nullable": false, "comment": "전화번호 해시값" },
+      { "name": "email_hash", "type": "varchar(64)", "nullable": true, "comment": "이메일 해시값" },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": false, "comment": "탈퇴 요청 IP" },
+      { "name": "signup_method", "type": "enum('phone','social')", "nullable": false },
+      { "name": "deletion_reason", "type": "enum('privacy_concern','no_longer_needed','other')", "nullable": true },
+      { "name": "deletion_reason_detail", "type": "text", "nullable": true },
+      { "name": "account_age_days", "type": "int", "nullable": false, "comment": "계정 생존 기간" },
+      { "name": "last_activity_days_ago", "type": "int", "nullable": true },
+      { "name": "total_logins", "type": "int", "nullable": true, "comment": "총 로그인 횟수" },
+      { "name": "had_social_accounts", "type": "tinyint(1)", "nullable": false },
+      { "name": "deleted_at", "type": "timestamp", "nullable": true },
+      { "name": "deleted_by_admin", "type": "tinyint(1)", "nullable": false },
+      { "name": "admin_id", "type": "varchar(36)", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 15,
     "sampleData": [
       {
-        "id": "del-001",
-        "user_id_hash": "hash-user001",
-        "deletion_reason": "privacy_concern"
+        "id": "ad-001",
+        "user_id_hash": "hashed_user_id_zzz",
+        "phone_hash": "hashed_phone_4567",
+        "ip_address": "8.8.8.8",
+        "signup_method": "phone",
+        "deletion_reason": "no_longer_needed",
+        "account_age_days": 60,
+        "had_social_accounts": 0,
+        "deleted_at": "2025-03-10 15:30:00",
+        "deleted_by_admin": 0
       }
+    ]
+  },
+  "signup_deletion_patterns": {
+    "description": "가입/탈퇴 패턴 분석",
+    "category": "security",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "phone_hash", "type": "varchar(64)", "nullable": false },
+      { "name": "email_hash", "type": "varchar(64)", "nullable": true },
+      { "name": "ip_address", "type": "varchar(45)", "nullable": false },
+      { "name": "signup_count", "type": "int", "nullable": false, "comment": "가입 횟수" },
+      { "name": "deletion_count", "type": "int", "nullable": false, "comment": "탈퇴 횟수" },
+      { "name": "first_signup_at", "type": "timestamp", "nullable": true },
+      { "name": "last_signup_at", "type": "timestamp", "nullable": true },
+      { "name": "last_deletion_at", "type": "timestamp", "nullable": true },
+      { "name": "shortest_account_duration_hours", "type": "int", "nullable": true, "comment": "최단 계정 유지 시간" },
+      { "name": "is_suspicious", "type": "tinyint(1)", "nullable": false, "comment": "의심스러운 패턴 여부" },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
     "relationships": [],
-    "indexes": [],
-    "constraints": []
+    "columnCount": 13,
+    "sampleData": [
+      {
+        "id": "sdp-001",
+        "phone_hash": "hashed_phone_1234",
+        "ip_address": "1.2.3.4",
+        "signup_count": 5,
+        "deletion_count": 4,
+        "first_signup_at": "2025-01-01 09:00:00",
+        "last_signup_at": "2025-04-01 10:00:00",
+        "last_deletion_at": "2025-04-01 10:30:00",
+        "shortest_account_duration_hours": 0.5,
+        "is_suspicious": 1,
+        "created_at": "2025-04-01 10:30:00"
+      }
+    ]
   },
   "admin_actions": {
-    "description": "관리자 작업 로그",
+    "description": "관리자 활동 로그",
     "category": "admin",
     "columns": [
-      {
-        "name": "id",
-        "type": "varchar(36)",
-        "key": "PRI",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "admin_id",
-        "type": "varchar(36)",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      },
-      {
-        "name": "action_type",
-        "type": "enum",
-        "key": "MUL",
-        "nullable": "UNKNOWN",
-        "default": null,
-        "extra": ""
-      }
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "admin_id", "type": "varchar(36)", "nullable": false },
+      { "name": "action_type", "type": "enum('user_blacklist','content_delete','settings_change')", "nullable": false },
+      { "name": "target_user_hash", "type": "varchar(64)", "nullable": true },
+      { "name": "target_phone_hash", "type": "varchar(64)", "nullable": true },
+      { "name": "reason", "type": "text", "nullable": true },
+      { "name": "metadata", "type": "longtext", "nullable": true },
+      { "name": "created_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
+    "relationships": ["users"],
+    "columnCount": 8,
     "sampleData": [
       {
-        "id": "action-001",
+        "id": "aa-001",
         "admin_id": "admin-001",
-        "action_type": "user_blacklist"
+        "action_type": "user_blacklist",
+        "target_phone_hash": "hashed_phone_1234",
+        "reason": "반복적인 가입/탈퇴",
+        "created_at": "2025-04-10 12:00:00"
       }
+    ]
+  },
+  "allowed_email_domains": {
+    "description": "허용 이메일 도메인",
+    "category": "admin",
+    "columns": [
+      { "name": "id", "type": "varchar(36)", "nullable": false },
+      { "name": "domain", "type": "varchar(255)", "nullable": false },
+      { "name": "provider_name", "type": "varchar(100)", "nullable": false, "comment": "제공자 이름" },
+      { "name": "country", "type": "varchar(10)", "nullable": true, "comment": "국가 코드" },
+      { "name": "is_active", "type": "tinyint(1)", "nullable": false },
+      { "name": "created_at", "type": "timestamp", "nullable": true },
+      { "name": "updated_at", "type": "timestamp", "nullable": true }
     ],
+    "primaryKeys": ["id"],
     "relationships": [],
-    "indexes": [],
-    "constraints": []
+    "columnCount": 7,
+    "sampleData": [
+      {
+        "id": "aed-001",
+        "domain": "naver.com",
+        "provider_name": "네이버",
+        "is_active": 1,
+        "created_at": "2024-10-01 00:00:00"
+      }
+    ]
+  },
+  "weather_banner_settings": {
+    "description": "날씨 배너 설정",
+    "category": "admin",
+    "columns": [
+      { "name": "id", "type": "int", "nullable": false },
+      { "name": "weather", "type": "enum('sunny','cloudy','rainy','snowy')", "nullable": false },
+      { "name": "temperature", "type": "decimal(4,1)", "nullable": false },
+      { "name": "air_quality", "type": "enum('good','normal','bad','very_bad')", "nullable": false },
+      { "name": "custom_message", "type": "varchar(100)", "nullable": false },
+      { "name": "updated_at", "type": "timestamp", "nullable": false }
+    ],
+    "primaryKeys": ["id"],
+    "relationships": [],
+    "columnCount": 6,
+    "sampleData": [
+      {
+        "id": 1,
+        "weather": "sunny",
+        "temperature": 25.5,
+        "air_quality": "good",
+        "custom_message": "화창한 날, 즐거운 하루 되세요!",
+        "updated_at": "2025-04-21 13:00:00"
+      }
+    ]
   }
 }
