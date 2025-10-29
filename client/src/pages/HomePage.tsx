@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { Link } from 'react-router-dom'
-import { getStats } from '@/utils/api'
+import { getStats } from '@/api/api'
 import { StatsData } from '@/types'
 import './HomePage.css'
 

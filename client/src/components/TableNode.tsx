@@ -63,6 +63,7 @@ const TableNode = memo(({ data, selected }: TableNodeProps) => {
     setShowModal(false)
   }
 
+
   // 샘플 데이터 렌더링
   const renderSampleData = () => {
     if (!sampleData || sampleData.length === 0) {

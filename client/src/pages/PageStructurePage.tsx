@@ -11,7 +11,7 @@ import ReactFlow, {
   ReactFlowInstance,
 } from 'reactflow'
 import 'reactflow/dist/style.css'
-import { getPages } from '@/utils/api'
+import { getPages } from '@/api/api'
 import { PagesData, PageNode } from '@/types'
 import PageNodeComponent from '@/components/PageNode'
 import './PageStructurePage.css'

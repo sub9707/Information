@@ -18,6 +18,8 @@ const nodeTypes = {
   tableNode: TableNode
 }
 
+console.log(nodeTypes)
+
 const SqlInfoPage = () => {
   const {
     loading,
@@ -32,6 +34,7 @@ const SqlInfoPage = () => {
   const [edges, setEdges, onEdgesChange] = useEdgesState([])
   const [showInstructions, setShowInstructions] = useState(false)
   const reactFlowInstanceRef = useRef<ReactFlowInstance | null>(null)
+
 
   // 초기 노드/엣지가 로드되면 상태 업데이트
   const onInit = useCallback((instance: ReactFlowInstance) => {

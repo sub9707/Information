@@ -10,7 +10,33 @@
         "method": "POST",
         "endpoint": "/api/auth/login",
         "description": "전화번호로 로그인",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "200": {
+            "description": "로그인 성공",
+            "body": {
+              "token": "string",
+              "user": {
+                "id": "string",
+                "name": "string",
+                "email": "string",
+                "phone": "string"
+              },
+              "expiresIn": "number",
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "401": {
+            "description": "인증 실패 (잘못된 자격 증명)",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-register",
@@ -18,7 +44,32 @@
         "method": "POST",
         "endpoint": "/api/auth/register",
         "description": "신규 회원 가입 (전화번호/SNS)",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "201": {
+            "description": "회원가입 성공",
+            "body": {
+              "user": {
+                "id": "string",
+                "name": "string",
+                "email": "string",
+                "phone": "string"
+              },
+              "token": "string",
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "400": {
+            "description": "입력 값 검증 실패 또는 중복된 계정",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-logout",
@@ -26,7 +77,17 @@
         "method": "POST",
         "endpoint": "/api/auth/logout",
         "description": "사용자 로그아웃 (세션 종료)",
-        "authentication": true
+        "authentication": true,
+        "response": {
+          "200": {
+            "description": "로그아웃 성공",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-forgot-password",
@@ -34,7 +95,18 @@
         "method": "POST",
         "endpoint": "/api/auth/forgot-password",
         "description": "비밀번호 재설정용 인증번호 발송",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "200": {
+            "description": "인증번호 발송 성공",
+            "body": {
+              "message": "string",
+              "expiresIn": "number",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-verify-reset-code",
@@ -42,7 +114,27 @@
         "method": "POST",
         "endpoint": "/api/auth/verify-reset-code",
         "description": "비밀번호 재설정 인증번호 확인",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "200": {
+            "description": "인증번호 검증 성공",
+            "body": {
+              "verified": "boolean",
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "400": {
+            "description": "인증번호 불일치 또는 만료",
+            "body": {
+              "verified": "boolean",
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-reset-password",
@@ -50,7 +142,17 @@
         "method": "POST",
         "endpoint": "/api/auth/reset-password",
         "description": "새 비밀번호로 변경",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "200": {
+            "description": "비밀번호 재설정 성공",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-change-password",
@@ -58,7 +160,25 @@
         "method": "POST",
         "endpoint": "/api/auth/change-password",
         "description": "로그인 상태에서 비밀번호 변경",
-        "authentication": true
+        "authentication": true,
+        "response": {
+          "200": {
+            "description": "비밀번호 변경 성공",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "401": {
+            "description": "인증 실패",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-change-password-with-email",
@@ -66,7 +186,25 @@
         "method": "POST",
         "endpoint": "/api/auth/change-password-with-email",
         "description": "이메일 인증으로 비밀번호 변경",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "200": {
+            "description": "이메일 인증 후 비밀번호 변경 성공",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "400": {
+            "description": "이메일 인증 실패 또는 만료",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-delete-account",
@@ -74,7 +212,25 @@
         "method": "POST",
         "endpoint": "/api/auth/delete-account",
         "description": "사용자 계정 삭제",
-        "authentication": true
+        "authentication": true,
+        "response": {
+          "200": {
+            "description": "계정 삭제 성공",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "401": {
+            "description": "인증 실패",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       },
       {
         "id": "auth-oauth",
@@ -82,10 +238,37 @@
         "method": "GET",
         "endpoint": "/api/auth/oauth",
         "description": "네이버/카카오 OAuth 로그인 및 콜백 처리",
-        "authentication": false
+        "authentication": false,
+        "response": {
+          "200": {
+            "description": "OAuth 로그인 성공",
+            "body": {
+              "token": "string",
+              "provider": "string",
+              "user": {
+                "id": "string",
+                "name": "string",
+                "email": "string",
+                "providerId": "string"
+              },
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          },
+          "400": {
+            "description": "OAuth 인증 실패",
+            "body": {
+              "message": "string",
+              "status": "string",
+              "code": "number"
+            }
+          }
+        }
       }
     ]
   },
+
   "registration": {
     "title": "사전접수 API",
     "description": "사전 참가 신청 관련 API",

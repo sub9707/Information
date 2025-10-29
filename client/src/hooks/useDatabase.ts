@@ -1,8 +1,9 @@
 import { useState, useEffect, useCallback } from 'react'
 import { Node, Edge, MarkerType } from 'reactflow'
-import { getTables } from '@/utils/api'
+import { getTables } from '@/api/api'
 import { TablesData, TableNodeData, TableCategory } from '@/types'
 import { CATEGORY_INFO } from '@/constants/database'
+import { table } from 'framer-motion/client'
 
 interface UseDatabaseReturn {
   loading: boolean
@@ -88,7 +89,8 @@ export function useDatabase(): UseDatabaseReturn {
           primaryKeys: primaryKeys.length > 0 ? primaryKeys : ['id'],
           foreignKeys: foreignKeys,
           relationships: relationships,
-          columnCount: table.columnCount || columns.length
+          columnCount: table.columnCount || columns.length,
+          sampleData: table.sampleData || null
         }
 
         newNodes.push({

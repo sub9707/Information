@@ -36,6 +36,7 @@ export interface ApiRequest {
 export interface ApiResponseExample {
   description: string
   example: any
+  body:any
 }
 
 export interface ApiInfo {
@@ -137,7 +138,7 @@ export interface TableInfo {
   primaryKeys: string[]
   relationships: string[]
   columnCount: number
-  sampleData?: Record<string, any>[]  // 샘플 데이터 추가
+  sampleData?: Record<string, any>[]
 }
 
 // 전체 테이블 데이터
@@ -156,5 +157,5 @@ export interface TableNodeData {
   foreignKeys: string[]
   relationships: string[]
   columnCount: number
-  sampleData?: Record<string, any>[]  // 샘플 데이터 추가
+  sampleData?: Record<string, any>[]
 }
