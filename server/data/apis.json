@@ -7,33 +7,35 @@
       {
         "id": "auth-login",
         "name": "로그인",
-        "method": "POST",
-        "endpoint": "/api/auth/login",
-        "description": "전화번호로 로그인",
+        "endpoint": "server-action:auth/loginAction",
+        "method": "SERVER_ACTION",
+        "action": "auth/loginAction",
+        "description": "아이디와 패스워드로 로그인",
         "authentication": false,
+        "note": "이 API는 Server Action 기반으로 동작하며, 클라이언트 코드에서 import 후 직접 실행됩니다.",
         "response": {
-          "200": {
+          "success": {
             "description": "로그인 성공",
             "body": {
               "token": "string",
               "user": {
                 "id": "string",
                 "name": "string",
-                "email": "string",
-                "phone": "string"
+                "username": "string",
+                "role": {
+                  "type": "string",
+                  "enum": ["user","admin"]
+                }
               },
               "expiresIn": "number",
-              "message": "string",
-              "status": "string",
-              "code": "number"
+              "status": "success"
             }
           },
-          "401": {
+          "error": {
             "description": "인증 실패 (잘못된 자격 증명)",
             "body": {
-              "message": "string",
-              "status": "string",
-              "code": "number"
+              "message": "사용자명 또는 비밀번호가 올바르지 않습니다.",
+              "status": "error"
             }
           }
         }
@@ -268,7 +270,6 @@
       }
     ]
   },
-
   "registration": {
     "title": "사전접수 API",
     "description": "사전 참가 신청 관련 API",

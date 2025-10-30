@@ -47,6 +47,7 @@ export interface ApiInfo {
   description: string
   authentication?: boolean
   adminOnly?: boolean
+  note?:string
   request?: ApiRequest
   response?: Record<string, ApiResponseExample>
 }

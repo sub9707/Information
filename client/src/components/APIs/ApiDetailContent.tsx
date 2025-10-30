@@ -15,6 +15,14 @@ const ApiDetailContent: React.FC<ApiDetailContentProps> = ({ api }) => {
 
       <p className="api-description">{api.description}</p>
 
+      {
+        api.note && (
+          <div className="api-note">
+            <strong>Note:</strong> {api.note}
+          </div>
+        )
+      }
+
       {api.authentication && (
         <div className="api-badge-group">
           <span className="badge badge-auth">인증 필요</span>
