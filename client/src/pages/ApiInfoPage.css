@@ -50,26 +50,28 @@
   gap: 1rem;
 }
 
-/* API Detail Modal Content */
+/* API 상세 정보 컨테이너 */
 .api-detail {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
+  padding: 2rem;
+  background-color: var(--color-bg);
+  border-radius: var(--radius-md);
 }
 
+/* API 헤더 */
 .api-detail-header {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding-bottom: 1rem;
-  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--color-border);
 }
 
 .method-badge {
-  padding: 0.375rem 0.75rem;
+  padding: 0.375rem 0.875rem;
   border-radius: var(--radius-sm);
-  font-weight: 600;
-  font-size: 0.8125rem;
+  font-weight: 700;
+  font-size: 0.875rem;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -80,8 +82,8 @@
 }
 
 .method-post {
-  background-color: #dcfce7;
-  color: #166534;
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
 .method-put {
@@ -95,37 +97,60 @@
 }
 
 .method-patch {
-  background-color: #e9d5ff;
-  color: #6b21a8;
+  background-color: #e0e7ff;
+  color: #4338ca;
 }
 
 .endpoint-code {
   flex: 1;
-  padding: 0.5rem 0.75rem;
+  padding: 0.75rem 1rem;
   background-color: var(--color-bg-secondary);
   border-radius: var(--radius-sm);
   font-family: 'Courier New', monospace;
-  font-size: 0.875rem;
+  font-size: 0.9375rem;
   color: var(--color-text);
   overflow-x: auto;
+  white-space: nowrap;
 }
 
+/* API 설명 */
 .api-description {
-  font-size: 0.9375rem;
+  font-size: 1rem;
   color: var(--color-text-secondary);
   line-height: 1.6;
+  margin-bottom: 1.5rem;
 }
 
+/* API 노트 */
+.api-note {
+  margin-bottom: 1.5rem;
+  padding: 1rem 1.25rem;
+  background-color: var(--color-bg-secondary);
+  border-left: 4px solid var(--color-accent);
+  font-size: 0.875rem;
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  border-radius: var(--radius-sm);
+}
+
+.api-note strong {
+  color: var(--color-text);
+  margin-right: 0.5rem;
+}
+
+/* 배지 그룹 */
 .api-badge-group {
   display: flex;
+  align-items: center;
   gap: 0.5rem;
+  margin-bottom: 1.5rem;
 }
 
 .badge {
-  padding: 0.25rem 0.625rem;
+  padding: 0.375rem 0.75rem;
   border-radius: var(--radius-sm);
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
 }
 
 .badge-auth {
@@ -138,44 +163,250 @@
   color: #991b1b;
 }
 
+/* 섹션 */
 .api-section {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
+  margin-top: 2rem;
+  padding-top: 2rem;
+  border-top: 1px solid var(--color-border);
 }
 
 .section-title {
-  font-size: 1.125rem;
-  font-weight: 600;
+  font-size: 1.25rem;
+  font-weight: 700;
   color: var(--color-text);
+  margin-bottom: 1.25rem;
 }
 
 .section-content {
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
+  margin-bottom: 1.5rem;
 }
 
 .subsection-title {
-  font-size: 0.9375rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-size: 1rem;
   font-weight: 600;
   color: var(--color-text);
+  margin-bottom: 1rem;
+}
+
+/* 파라미터 그리드 */
+.parameters-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+
+.parameter-card {
+  background: linear-gradient(135deg, #f9fafb 0%, #f3f4f6 100%);
+  border: 1px solid #e5e7eb;
+  border-radius: var(--radius-sm);
+  padding: 1.25rem;
+  transition: all var(--transition-base);
+}
+
+.parameter-card:hover {
+  border-color: var(--color-primary);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  background: linear-gradient(135deg, #ffffff 0%, #f9fafb 100%);
+}
+
+.parameter-card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.75rem;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.parameter-name-group {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-wrap: wrap;
+}
+
+.parameter-name-code {
+  font-family: 'Courier New', monospace;
+  font-size: 1rem;
+  font-weight: 700;
+  color: #2563eb;
+  padding: 0.25rem 0.625rem;
+  background-color: #eff6ff;
+  border-radius: 0.25rem;
+  border: 1px solid #bfdbfe;
+}
+
+.parameter-type-badge {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #059669;
+  padding: 0.25rem 0.5rem;
+  background-color: #d1fae5;
+  border-radius: 0.25rem;
+  border: 1px solid #6ee7b7;
+}
+
+.parameter-format-badge {
+  font-size: 0.6875rem;
+  color: #7c3aed;
+  padding: 0.25rem 0.5rem;
+  background-color: #ede9fe;
+  border-radius: 0.25rem;
+  border: 1px solid #c4b5fd;
+}
+
+.parameter-required-badge {
+  padding: 0.25rem 0.5rem;
+  background-color: #fef3c7;
+  color: #d97706;
+  font-size: 0.6875rem;
+  font-weight: 700;
+  border-radius: 0.25rem;
+  border: 1px solid #fcd34d;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.parameter-description-text {
+  font-size: 0.875rem;
+  color: #4b5563;
+  line-height: 1.6;
+  margin: 0 0 0.75rem 0;
+}
+
+/* 제약사항 박스 */
+.parameter-constraints-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  background-color: #ffffff;
+  border-radius: 0.25rem;
+  border: 1px solid #e5e7eb;
+  margin-bottom: 0.75rem;
+}
+
+.constraint-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.8125rem;
+}
+
+.constraint-item.pattern {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0.25rem;
+}
+
+.constraint-label {
+  color: #6b7280;
+  font-weight: 600;
+  min-width: 50px;
+}
+
+.constraint-value {
+  color: #374151;
+  font-family: 'Courier New', monospace;
+}
+
+.constraint-pattern {
+  font-size: 0.75rem;
+  color: #d97706;
+  background-color: #fef3c7;
+  padding: 0.375rem 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #fcd34d;
+  word-break: break-all;
+  display: block;
+  width: 100%;
+}
+
+/* 예시 토글 */
+.parameter-example-container {
+  margin-top: 0.75rem;
+}
+
+.example-toggle-button {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 0.625rem 0.875rem;
+  background: linear-gradient(135deg, #f3f4f6 0%, #e5e7eb 100%);
+  border: 1px solid #d1d5db;
+  border-radius: 0.25rem;
+  color: #374151;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+.example-toggle-button:hover {
+  background: linear-gradient(135deg, #e5e7eb 0%, #d1d5db 100%);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+
+.example-toggle-text {
   display: flex;
   align-items: center;
   gap: 0.5rem;
 }
 
-.status-code {
-  padding: 0.25rem 0.5rem;
-  border-radius: var(--radius-sm);
-  font-family: 'Courier New', monospace;
-  font-size: 0.8125rem;
-  font-weight: 600;
+.example-toggle-icon {
+  font-size: 0.625rem;
+  transition: transform var(--transition-fast);
 }
 
-.status-2xx, .status-sxx {
-  background-color: #dcfce7;
-  color: #166534;
+.example-toggle-icon.expanded {
+  transform: rotate(180deg);
+}
+
+.parameter-example-code {
+  margin-top: 0.5rem;
+  padding: 0.875rem;
+  background-color: #1e1e1e;
+  border: 1px solid #333;
+  border-radius: 0.25rem;
+  overflow-x: auto;
+  animation: slideDown 0.2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.parameter-example-code code {
+  color: #fbbf24;
+  font-family: 'Courier New', monospace;
+  font-size: 0.8125rem;
+  line-height: 1.6;
+}
+
+/* 상태 코드 */
+.status-code {
+  padding: 0.25rem 0.75rem;
+  border-radius: var(--radius-sm);
+  font-weight: 700;
+  font-size: 0.875rem;
+  font-family: 'Courier New', monospace;
+}
+
+.status-2xx {
+  background-color: #d1fae5;
+  color: #065f46;
 }
 
 .status-4xx {
@@ -183,98 +414,102 @@
   color: #92400e;
 }
 
-.status-5xx, .status-exx {
+.status-5xx {
   background-color: #fee2e2;
   color: #991b1b;
 }
 
-.parameters-table {
+/* 응답 예시 */
+.response-examples {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  margin-top: 1rem;
 }
 
-.parameter-row {
-  padding: 1rem;
-  background-color: var(--color-bg-secondary);
-  border-radius: var(--radius-md);
-  border: 1px solid var(--color-border-light);
+.response-example-item {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  overflow: hidden;
 }
 
-.parameter-info {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  margin-bottom: 0.5rem;
-}
-
-.parameter-name {
-  font-family: 'Courier New', monospace;
-  font-size: 0.875rem;
+.example-case {
   font-weight: 600;
   color: var(--color-text);
-}
-
-.parameter-type {
-  padding: 0.125rem 0.5rem;
-  background-color: var(--color-bg);
-  color: var(--color-text-secondary);
-  font-size: 0.75rem;
-  border-radius: var(--radius-sm);
-  font-family: 'Courier New', monospace;
-}
-
-.parameter-required {
-  padding: 0.125rem 0.5rem;
-  background-color: #fee2e2;
-  color: #991b1b;
-  font-size: 0.75rem;
-  border-radius: var(--radius-sm);
-  font-weight: 500;
-}
-
-.parameter-description {
+  margin: 0;
+  padding: 0.75rem 1rem;
   font-size: 0.875rem;
-  color: var(--color-text-secondary);
-  margin-bottom: 0.5rem;
-}
-
-.parameter-example {
-  display: block;
-  padding: 0.5rem;
-  background-color: var(--color-bg);
-  border-radius: var(--radius-sm);
-  font-family: 'Courier New', monospace;
-  font-size: 0.8125rem;
-  color: var(--color-text-secondary);
+  background-color: var(--color-bg-secondary);
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 .response-example {
+  background-color: #1e1e1e;
   padding: 1rem;
-  background-color: var(--color-gray-900);
-  color: #e5e7eb;
-  border-radius: var(--radius-md);
   overflow-x: auto;
-  font-family: 'Courier New', monospace;
-  font-size: 0.8125rem;
-  line-height: 1.6;
+  margin: 0;
 }
 
 .response-example code {
-  color: #e5e7eb;
+  color: #d4d4d4;
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  line-height: 1.6;
 }
 
-@media (max-width: 768px) {
-  .api-cards-grid {
-    grid-template-columns: 1fr;
-  }
+/* 참고사항 리스트 */
+.notes-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
 
-  .api-detail-header {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+.notes-list li {
+  padding: 0.75rem 1rem;
+  padding-left: 2.5rem;
+  background-color: var(--color-bg-secondary);
+  border-radius: var(--radius-sm);
+  color: var(--color-text-secondary);
+  line-height: 1.5;
+  position: relative;
+}
 
-  .endpoint-code {
-    width: 100%;
-  }
+.notes-list li::before {
+  content: "•";
+  position: absolute;
+  left: 1rem;
+  color: var(--color-primary);
+  font-weight: 700;
+  font-size: 1.25rem;
+}
+
+/* 관련 엔드포인트 리스트 */
+.related-endpoints-list {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.related-endpoint {
+  display: block;
+  background-color: var(--color-bg-secondary);
+  padding: 0.75rem 1rem;
+  border-radius: var(--radius-sm);
+  font-family: 'Courier New', monospace;
+  font-size: 0.875rem;
+  color: var(--color-text);
+  border: 1px solid var(--color-border);
+  transition: all var(--transition-base);
+}
+
+.related-endpoint:hover {
+  background-color: var(--color-bg);
+  border-color: var(--color-primary);
+  transform: translateX(4px);
 }

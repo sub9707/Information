@@ -26,11 +26,10 @@ export default defineConfig(({ mode }) => ({
     strictPort: false,
     host: true, // 모든 네트워크 인터페이스에서 접근 가능
     proxy: {
-      '/api': {
+      '^/api/': {
         target: process.env.VITE_API_URL || 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
-        rewrite: (path) => path
       },
     },
   },

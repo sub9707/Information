@@ -301,13 +301,28 @@ app.use((req, res, next) => {
 });
 
 // 에러 핸들러
-app.use((err, req, res, next) => {
-  console.error('Server error:', err);
-  res.status(500).json({
-    success: false,
-    error: '서버 내부 오류가 발생했습니다.',
-    timestamp: new Date().toISOString()
-  });
+app.use((req, res, next) => {
+  // API 요청인 경우
+  if (req.path.startsWith('/api')) {
+    return res.status(404).json({
+      success: false,
+      error: '요청하신 API를 찾을 수 없습니다.',
+      path: req.path,
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  // 개발 모드에서는 404 메시지 반환
+  if (process.env.NODE_ENV !== 'production') {
+    return res.status(404).json({
+      success: false,
+      error: '페이지를 찾을 수 없습니다.',
+      timestamp: new Date().toISOString()
+    });
+  }
+
+  // 프로덕션에서는 React 앱의 index.html 제공
+  res.sendFile(path.join(__dirname, '../client/dist', 'index.html'));
 });
 
 // 서버 시작

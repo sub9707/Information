@@ -21,22 +21,28 @@ export interface PagesData {
 // ============================================
 export interface ApiParameter {
   type: string
+  format?: string
   required?: boolean
   default?: any
   description?: string
   example?: any
   values?: string[]
+  length?: number
+  minLength?: number
+  maxLength?: number
+  pattern?: string
 }
 
 export interface ApiRequest {
+  required?: boolean
+  content?: Record<string, ApiParameter>
   body?: Record<string, ApiParameter>
   query?: Record<string, ApiParameter>
 }
 
 export interface ApiResponseExample {
-  description: string
-  example: any
-  body:any
+  case: string
+  body: any
 }
 
 export interface ApiInfo {
@@ -47,10 +53,13 @@ export interface ApiInfo {
   description: string
   authentication?: boolean
   adminOnly?: boolean
-  note?:string
+  note?: string
   request?: ApiRequest
-  response?: Record<string, ApiResponseExample>
+  response?: Record<string, ApiResponse>
+  notes?: string[]
+  relatedEndpoints?: string[]
 }
+
 
 export interface ApiCategory {
   title: string
@@ -85,11 +94,10 @@ export interface StatsData {
 // ============================================
 // API 응답 타입
 // ============================================
-export interface ApiResponse<T = any> {
-  success: boolean
-  data?: T
-  error?: string
-  timestamp?: string
+export interface ApiResponse {
+  description: string
+  body?: any
+  examples?: ApiResponseExample[]
 }
 
 // ============================================
