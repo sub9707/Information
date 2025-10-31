@@ -277,6 +277,45 @@
   margin: 0 0 0.75rem 0;
 }
 
+/* 가능한 값 (enum) */
+.parameter-values-container {
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+}
+
+.parameter-values-label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  color: #6b7280;
+  margin-bottom: 0.5rem;
+}
+
+.parameter-values-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.parameter-value-item {
+  display: inline-block;
+  padding: 0.375rem 0.75rem;
+  background-color: #ede9fe;
+  color: #7c3aed;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  font-family: 'Courier New', monospace;
+  border-radius: 0.25rem;
+  border: 1px solid #c4b5fd;
+  transition: all var(--transition-fast);
+}
+
+.parameter-value-item:hover {
+  background-color: #ddd6fe;
+  border-color: #a78bfa;
+  transform: translateY(-1px);
+}
+
 /* 제약사항 박스 */
 .parameter-constraints-box {
   display: flex;

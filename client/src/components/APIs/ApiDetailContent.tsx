@@ -47,60 +47,90 @@ const ApiDetailContent: React.FC<ApiDetailContentProps> = ({ api }) => {
             <div className="section-content">
               <h4 className="subsection-title">Body Parameters</h4>
               <div className="parameters-grid">
-                {Object.entries(api.request.content || api.request.body || {}).map(
-                  ([key, param]) => {
-                    const paramValue = param as ApiParameter
-                    const exampleKey = `param-${key}`
-                    
-                    return (
-                      <div key={key} className="parameter-item">
-                        <div className="parameter-header">
-                          <span className="parameter-name">{key}</span>
-                          <span className="parameter-type">{paramValue.type}</span>
-                          {paramValue.required && (
-                            <span className="parameter-required">required</span>
+                {Object.entries(api.request.content || api.request.body || {}).map(([key, paramValue]) => {
+                  const param = paramValue as ApiParameter
+                  const exampleKey = `request-body-${key}`
+                  return (
+                    <div key={key} className="parameter-card">
+                      <div className="parameter-card-header">
+                        <div className="parameter-name-group">
+                          <code className="parameter-name-code">{key}</code>
+                          <span className="parameter-type-badge">{param.type}</span>
+                          {param.format && (
+                            <span className="parameter-format-badge">{param.format}</span>
                           )}
                         </div>
-                        
-                        {paramValue.description && (
-                          <p className="parameter-description">{paramValue.description}</p>
-                        )}
-                        
-                        {paramValue.default !== undefined && (
-                          <p className="parameter-default">
-                            Default: <code>{JSON.stringify(paramValue.default)}</code>
-                          </p>
-                        )}
-                        
-                        {paramValue.values && (
-                          <p className="parameter-values">
-                            Values: {paramValue.values.join(', ')}
-                          </p>
-                        )}
-                        
-                        {paramValue.example !== undefined && (
-                          <div className="parameter-example">
-                            <button
-                              onClick={() => toggleExample(exampleKey)}
-                              className="example-toggle"
-                            >
-                              Example
-                              <span className={`toggle-icon ${expandedExamples[exampleKey] ? 
-                                'expanded' : ''}`}>
-                                ▼
-                              </span>
-                            </button>
-                            {expandedExamples[exampleKey] && (
-                              <pre className="parameter-example-code">
-                                <code>{JSON.stringify(paramValue.example, null, 2)}</code>
-                              </pre>
-                            )}
-                          </div>
+                        {param.required && (
+                          <span className="parameter-required-badge">required</span>
                         )}
                       </div>
-                    )
-                  }
-                )}
+                      
+                      <p className="parameter-description-text">{param.description}</p>
+                      
+                      {/* 가능한 값 (enum) */}
+                      {param.values && param.values.length > 0 && (
+                        <div className="parameter-values-container">
+                          <span className="parameter-values-label">가능한 값:</span>
+                          <div className="parameter-values-list">
+                            {param.values.map((value: string, index: number) => (
+                              <code key={index} className="parameter-value-item">{value}</code>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+
+                      {/* 제약사항 */}
+                      {(param.length || param.minLength || param.maxLength || param.pattern) && (
+                        <div className="parameter-constraints-box">
+                          {param.length && (
+                            <div className="constraint-item">
+                              <span className="constraint-label">길이:</span>
+                              <span className="constraint-value">{param.length}</span>
+                            </div>
+                          )}
+                          {param.minLength && (
+                            <div className="constraint-item">
+                              <span className="constraint-label">최소:</span>
+                              <span className="constraint-value">{param.minLength}자</span>
+                            </div>
+                          )}
+                          {param.maxLength && (
+                            <div className="constraint-item">
+                              <span className="constraint-label">최대:</span>
+                              <span className="constraint-value">{param.maxLength}자</span>
+                            </div>
+                          )}
+                          {param.pattern && (
+                            <div className="constraint-item pattern">
+                              <span className="constraint-label">패턴:</span>
+                              <code className="constraint-pattern">{param.pattern}</code>
+                            </div>
+                          )}
+                        </div>
+                      )}
+
+                      {/* 예시 접기/펼치기 */}
+                      {param.example && (
+                        <div className="parameter-example-container">
+                          <button 
+                            className="example-toggle-button"
+                            onClick={() => toggleExample(exampleKey)}
+                          >
+                            <span className="example-toggle-text">예시 보기</span>
+                            <span className={`example-toggle-icon ${expandedExamples[exampleKey] ? 'expanded' : ''}`}>
+                              ▼
+                            </span>
+                          </button>
+                          {expandedExamples[exampleKey] && (
+                            <pre className="parameter-example-code">
+                              <code>{JSON.stringify(param.example, null, 2)}</code>
+                            </pre>
+                          )}
+                        </div>
+                      )}
+                    </div>
+                  )
+                })}
               </div>
             </div>
           )}
@@ -110,51 +140,48 @@ const ApiDetailContent: React.FC<ApiDetailContentProps> = ({ api }) => {
             <div className="section-content">
               <h4 className="subsection-title">Query Parameters</h4>
               <div className="parameters-grid">
-                {Object.entries(api.request.query).map(([key, param]) => {
-                  const paramValue = param as ApiParameter
-                  const exampleKey = `query-${key}`
-                  
+                {Object.entries(api.request.query).map(([key, paramValue]) => {
+                  const param = paramValue as ApiParameter
+                  const exampleKey = `request-query-${key}`
                   return (
-                    <div key={key} className="parameter-item">
-                      <div className="parameter-header">
-                        <span className="parameter-name">{key}</span>
-                        <span className="parameter-type">{paramValue.type}</span>
-                        {paramValue.required && (
-                          <span className="parameter-required">required</span>
+                    <div key={key} className="parameter-card">
+                      <div className="parameter-card-header">
+                        <div className="parameter-name-group">
+                          <code className="parameter-name-code">{key}</code>
+                          <span className="parameter-type-badge">{param.type}</span>
+                        </div>
+                        {param.required && (
+                          <span className="parameter-required-badge">required</span>
                         )}
                       </div>
+                      <p className="parameter-description-text">{param.description}</p>
                       
-                      {paramValue.description && (
-                        <p className="parameter-description">{paramValue.description}</p>
+                      {/* 가능한 값 (enum) */}
+                      {param.values && param.values.length > 0 && (
+                        <div className="parameter-values-container">
+                          <span className="parameter-values-label">가능한 값:</span>
+                          <div className="parameter-values-list">
+                            {param.values.map((value: string, index: number) => (
+                              <code key={index} className="parameter-value-item">{value}</code>
+                            ))}
+                          </div>
+                        </div>
                       )}
-                      
-                      {paramValue.default !== undefined && (
-                        <p className="parameter-default">
-                          Default: <code>{JSON.stringify(paramValue.default)}</code>
-                        </p>
-                      )}
-                      
-                      {paramValue.values && (
-                        <p className="parameter-values">
-                          Values: {paramValue.values.join(', ')}
-                        </p>
-                      )}
-                      
-                      {paramValue.example !== undefined && (
-                        <div className="parameter-example">
-                          <button
+
+                      {param.example && (
+                        <div className="parameter-example-container">
+                          <button 
+                            className="example-toggle-button"
                             onClick={() => toggleExample(exampleKey)}
-                            className="example-toggle"
                           >
-                            Example
-                            <span className={`toggle-icon ${expandedExamples[exampleKey] ? 
-                              'expanded' : ''}`}>
+                            <span className="example-toggle-text">예시 보기</span>
+                            <span className={`example-toggle-icon ${expandedExamples[exampleKey] ? 'expanded' : ''}`}>
                               ▼
                             </span>
                           </button>
                           {expandedExamples[exampleKey] && (
                             <pre className="parameter-example-code">
-                              <code>{JSON.stringify(paramValue.example, null, 2)}</code>
+                              <code>{JSON.stringify(param.example, null, 2)}</code>
                             </pre>
                           )}
                         </div>
@@ -184,14 +211,17 @@ const ApiDetailContent: React.FC<ApiDetailContentProps> = ({ api }) => {
                 {/* examples 배열이 있는 경우 */}
                 {response.examples && response.examples.length > 0 ? (
                   <div className="response-examples">
-                    {response.examples.map((example: ApiResponseExample, index: number) => (
-                      <div key={index} className="response-example-item">
-                        <p className="example-case">{example.case}</p>
-                        <pre className="response-example">
-                          <code>{JSON.stringify(example.body, null, 2)}</code>
-                        </pre>
-                      </div>
-                    ))}
+                    {response.examples.map((exampleValue: ApiResponseExample, index: number) => {
+                      const example = exampleValue as ApiResponseExample
+                      return (
+                        <div key={index} className="response-example-item">
+                          <p className="example-case">{example.case}</p>
+                          <pre className="response-example">
+                            <code>{JSON.stringify(example.body, null, 2)}</code>
+                          </pre>
+                        </div>
+                      )
+                    })}
                   </div>
                 ) : (
                   /* body가 있는 경우 */
@@ -213,9 +243,10 @@ const ApiDetailContent: React.FC<ApiDetailContentProps> = ({ api }) => {
           <h3 className="section-title">참고사항</h3>
           <div className="section-content">
             <ul className="notes-list">
-              {api.notes.map((note: string, index: number) => (
-                <li key={index}>{note}</li>
-              ))}
+              {api.notes.map((noteValue: string, index: number) => {
+                const note = noteValue as string
+                return <li key={index}>{note}</li>
+              })}
             </ul>
           </div>
         </div>
