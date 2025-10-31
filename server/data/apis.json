@@ -4017,7 +4017,9 @@
             }
           }
         },
-        "notes": [ "temperature는 소수점 포함 가능"]
+        "notes": [
+          "temperature는 소수점 포함 가능"
+        ]
       },
       {
         "id": "admin-weather-banner-update",
@@ -4102,85 +4104,1117 @@
     "color": "red",
     "apis": [
       {
+        "id": "admin-event-prizes-list",
+        "name": "이벤트 상품 목록 조회",
+        "method": "GET",
+        "endpoint": "/api/admin/event/prizes",
+        "description": "모든 이벤트 상품과 확률 정보를 조회합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "상품 목록 조회 성공",
+            "body": {
+              "success": true,
+              "data": [
+                {
+                  "id": "number",
+                  "name": "string",
+                  "description": "string",
+                  "image_url": "string",
+                  "quantity": "number",
+                  "remaining_quantity": "number",
+                  "sort_order": "number",
+                  "is_active": "boolean",
+                  "probability": "number",
+                  "probability_active": "boolean",
+                  "created_at": "datetime",
+                  "updated_at": "datetime"
+                }
+              ]
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "상품 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "상품과 확률 정보를 LEFT JOIN으로 조회",
+          "sort_order 기준 정렬"
+        ]
+      },
+      {
+        "id": "admin-event-prizes-update-probability",
+        "name": "이벤트 상품 확률 업데이트",
+        "method": "PATCH",
+        "endpoint": "/api/admin/event/prizes",
+        "description": "특정 상품의 당첨 확률을 업데이트합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": true,
+          "content": {
+            "prize_id": {
+              "type": "number",
+              "required": true,
+              "description": "상품 ID"
+            },
+            "probability": {
+              "type": "number",
+              "required": true,
+              "description": "당첨 확률 (0-100)",
+              "example": 10.5
+            },
+            "is_active": {
+              "type": "boolean",
+              "required": false,
+              "description": "활성화 여부",
+              "example": true
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "확률 업데이트 성공",
+            "body": {
+              "success": true,
+              "message": "상품 확률이 업데이트되었습니다."
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "examples": [
+              {
+                "case": "필수 필드 누락",
+                "body": {
+                  "success": false,
+                  "error": "상품 ID와 확률이 필요합니다."
+                }
+              },
+              {
+                "case": "확률 범위 초과",
+                "body": {
+                  "success": false,
+                  "error": "확률은 0-100 사이의 값이어야 합니다."
+                }
+              }
+            ]
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "확률 업데이트 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "확률은 0-100 사이 값",
+          "is_active 미제공 시 기본값 true",
+          "트랜잭션 처리로 데이터 무결성 보장",
+          "활성 상품 총 확률 합계 검증 (100% 권장)"
+        ]
+      },
+      {
+        "id": "admin-event-prize-quantity-update",
+        "name": "이벤트 상품 수량 업데이트",
+        "method": "PATCH",
+        "endpoint": "/api/admin/event/prizes/[id]/quantity",
+        "description": "특정 상품의 현재 수량을 업데이트합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": true,
+          "path_parameters": {
+            "id": {
+              "type": "string",
+              "required": true,
+              "description": "상품 ID"
+            }
+          },
+          "content": {
+            "current_quantity": {
+              "type": "number",
+              "required": true,
+              "description": "현재 수량 (0 이상)",
+              "example": 50
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "수량 업데이트 성공",
+            "body": {
+              "success": true,
+              "message": "상품 수량이 업데이트되었습니다."
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "body": {
+              "success": false,
+              "error": "유효한 수량을 입력해주세요."
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "404": {
+            "description": "상품을 찾을 수 없음",
+            "body": {
+              "success": false,
+              "error": "상품을 찾을 수 없습니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "수량 업데이트 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "current_quantity는 0 이상 값",
+          "존재하지 않는 상품 ID 시 404 반환"
+        ]
+      },
+      {
+        "id": "admin-event-roulette-stats",
+        "name": "룰렛 이벤트 참여 통계 조회",
+        "method": "GET",
+        "endpoint": "/api/admin/event/roulette/stats",
+        "description": "룰렛 이벤트의 전체 참여 통계와 최근 7일간 일별 통계를 조회합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "통계 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "total_participations": "number",
+                "unique_participants": "number",
+                "total_winners": "number",
+                "prize_winners": "number",
+                "consolation_count": "number",
+                "daily_stats": [
+                  {
+                    "participation_date": "date",
+                    "participations": "number",
+                    "winners": "number"
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "통계 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "total_participations: 전체 참여 수",
+          "unique_participants: 고유 참여자 수",
+          "total_winners: 전체 당첨자 수",
+          "prize_winners: 경품 당첨자 수 (꽝 제외)",
+          "consolation_count: 꽝 횟수",
+          "daily_stats: 최근 7일간 일별 통계"
+        ]
+      },
+      {
+        "id": "admin-event-settings-get",
+        "name": "이벤트 설정 조회",
+        "method": "GET",
+        "endpoint": "/api/admin/event/settings",
+        "description": "이벤트 관련 설정을 조회합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "설정 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "daily_participation_limit": "number",
+                "event_active": "boolean",
+                "max_concurrent_spins": "number",
+                "roulette_animation_duration": "number"
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "설정 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "daily_participation_limit: 일일 참여 제한 (기본값 1)",
+          "event_active: 이벤트 활성화 여부",
+          "max_concurrent_spins: 최대 동시 회전 수 (기본값 10)",
+          "roulette_animation_duration: 룰렛 애니메이션 시간(ms, 기본값 3000)"
+        ]
+      },
+      {
+        "id": "admin-event-settings-update",
+        "name": "이벤트 설정 업데이트",
+        "method": "PATCH",
+        "endpoint": "/api/admin/event/settings",
+        "description": "이벤트 관련 설정을 업데이트합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": true,
+          "content": {
+            "setting_key": {
+              "type": "string",
+              "required": true,
+              "description": "설정 키",
+              "values": [
+                "daily_participation_limit",
+                "event_active",
+                "max_concurrent_spins",
+                "roulette_animation_duration"
+              ]
+            },
+            "setting_value": {
+              "type": "string | number | boolean",
+              "required": true,
+              "description": "설정 값",
+              "example": "true"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "설정 업데이트 성공",
+            "body": {
+              "success": true,
+              "message": "설정이 업데이트되었습니다."
+            }
+          },
+          "400": {
+            "description": "잘못된 요청",
+            "examples": [
+              {
+                "case": "필수 필드 누락",
+                "body": {
+                  "success": false,
+                  "error": "설정 키와 값이 필요합니다."
+                }
+              },
+              {
+                "case": "허용되지 않은 설정 키",
+                "body": {
+                  "success": false,
+                  "error": "허용되지 않은 설정 키입니다."
+                }
+              }
+            ]
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "설정 업데이트 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "허용된 설정 키만 업데이트 가능",
+          "UPSERT 방식으로 설정 저장 (없으면 생성, 있으면 업데이트)"
+        ]
+      },
+      {
+        "id": "admin-event-stats",
+        "name": "이벤트 통계 조회",
+        "method": "GET",
+        "endpoint": "/api/admin/event/stats",
+        "description": "이벤트의 오늘, 전체, 상품별 당첨 통계를 조회합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "통계 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "today": {
+                  "today_participants": "number",
+                  "today_winners": "number",
+                  "today_prize_winners": "number"
+                },
+                "total": {
+                  "total_participants": "number",
+                  "total_winners": "number",
+                  "total_prize_winners": "number"
+                },
+                "prizes": [
+                  {
+                    "name": "string",
+                    "icon": "string",
+                    "color": "string",
+                    "current_quantity": "number",
+                    "initial_quantity": "number",
+                    "winner_count": "number",
+                    "total_value": "number"
+                  }
+                ]
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "통계 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "today: 오늘 참여자/당첨자 통계",
+          "total: 전체 참여자/당첨자 통계",
+          "prizes: 상품별 당첨 통계 (꽝 제외)",
+          "당첨 수 내림차순 정렬"
+        ]
+      },
+      {
         "id": "admin-registrations-list",
-        "name": "사전접수 목록",
+        "name": "사전접수 목록 조회",
         "method": "GET",
         "endpoint": "/api/admin/online-festival/registrations",
-        "description": "사전접수 신청 목록 조회 (관리자)",
+        "description": "온라인 축제 사전접수 목록을 조회합니다. 페이지네이션, 검색, 프로그램 필터링을 지원합니다. 관리자 권한이 필요합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false,
+          "query": {
+            "page": {
+              "type": "number",
+              "required": false,
+              "description": "페이지 번호 (기본값: 1)",
+              "example": 1
+            },
+            "limit": {
+              "type": "number",
+              "required": false,
+              "description": "페이지당 항목 수 (기본값: 20)",
+              "example": 20
+            },
+            "search": {
+              "type": "string",
+              "required": false,
+              "description": "검색어 (이름 또는 전화번호)",
+              "example": "홍길동"
+            },
+            "program": {
+              "type": "string",
+              "required": false,
+              "description": "참가 프로그램 필터",
+              "example": "음악회"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "목록 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "items": [
+                  {
+                    "id": "string",
+                    "user_id": "string",
+                    "name": "string",
+                    "phone": "string",
+                    "registration_number": "string",
+                    "participant_type": "string",
+                    "companions": "number",
+                    "companion_details": "string | null",
+                    "address": "string",
+                    "address_detail": "string | null",
+                    "zip_code": "string",
+                    "special_requests": "string | null",
+                    "marketing_consent": "boolean",
+                    "privacy_consent": "boolean",
+                    "status": "string",
+                    "created_at": "datetime"
+                  }
+                ],
+                "total": "number",
+                "totalParticipants": "number",
+                "page": "number",
+                "totalPages": "number"
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "사전접수 목록 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "페이지네이션 지원 (기본 20개씩)",
+          "이름/전화번호 검색 가능",
+          "프로그램별 필터링 가능",
+          "totalParticipants: 신청자 + 동행자 합계",
+          "최신순 정렬"
+        ]
+      },
+      {
+        "id": "admin-registration-delete",
+        "name": "사전접수 삭제",
+        "method": "DELETE",
+        "endpoint": "/api/admin/online-festival/registrations/[id]",
+        "description": "특정 사전접수를 삭제합니다. 관리자 권한이 필요합니다",
+        "authentication": true,
+        "request": {
+          "required": false,
+          "path_parameters": {
+            "id": {
+              "type": "string",
+              "required": true,
+              "description": "사전접수 ID"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "삭제 성공",
+            "body": {
+              "success": true,
+              "message": "사전접수가 삭제되었습니다."
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "404": {
+            "description": "사전접수를 찾을 수 없음",
+            "body": {
+              "success": false,
+              "error": "존재하지 않는 사전접수입니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "사전접수 삭제 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "존재하지 않는 ID 시 404 반환",
+          "삭제된 데이터 복구 불가"
+        ]
+      },
+      {
+        "id": "admin-registrations-export",
+        "name": "사전접수 엑셀 내보내기",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/registrations/export",
+        "description": "사전접수 목록을 엑셀 파일로 내보냅니다. 목록, 전체통계, 참여유형별통계 시트를 포함합니다",
+        "authentication": true,
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "엑셀 파일 생성 및 다운로드 성공",
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "headers": {
+              "Content-Disposition": "attachment; filename*=UTF-8''사전접수목록_YYYYMMDD.xlsx",
+              "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              "Content-Length": "number"
+            },
+            "body": "Binary (Excel file)"
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "엑셀 다운로드 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "3개 시트 포함: 사전접수목록, 전체통계, 참여유형별통계",
+          "참여유형: 일반시민, 한부모가족, 자조모임, 자원봉사자, 유관기관",
+          "상태: 확정, 대기, 취소",
+          "파일명 형식: 사전접수목록_YYYYMMDD.xlsx"
+        ]
       },
       {
         "id": "admin-quiz-participants-list",
-        "name": "퀴즈 참여자 목록",
+        "name": "퀴즈 참여자 목록 조회",
         "method": "GET",
         "endpoint": "/api/admin/online-festival/quiz-participants",
-        "description": "퀴즈 참여자 목록 조회 (관리자)",
+        "description": "퀴즈 참여자 목록을 조회합니다. 페이지네이션, 검색, 필터링을 지원합니다. 관리자 권한이 필요합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false,
+          "query": {
+            "page": {
+              "type": "number",
+              "required": false,
+              "description": "페이지 번호 (기본값: 1)",
+              "example": 1
+            },
+            "limit": {
+              "type": "number",
+              "required": false,
+              "description": "페이지당 항목 수 (기본값: 20)",
+              "example": 20
+            },
+            "search": {
+              "type": "string",
+              "required": false,
+              "description": "검색어 (이름 또는 전화번호)",
+              "example": "홍길동"
+            },
+            "quiz_version": {
+              "type": "string",
+              "required": false,
+              "description": "퀴즈 버전 필터",
+              "example": "v1"
+            },
+            "perfect_only": {
+              "type": "boolean",
+              "required": false,
+              "description": "만점자만 조회 (true/false)",
+              "example": "true"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "목록 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "items": [
+                  {
+                    "id": "string",
+                    "user_id": "string",
+                    "name": "string",
+                    "phone": "string",
+                    "quiz_version": "string",
+                    "perfect_score": "boolean",
+                    "total_questions": "number",
+                    "correct_answers": "number",
+                    "completion_time": "number",
+                    "participated_at": "datetime"
+                  }
+                ],
+                "total": "number",
+                "page": "number",
+                "totalPages": "number"
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "퀴즈 참여자 목록 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "페이지네이션 지원 (기본 20개씩)",
+          "이름/전화번호 검색 가능",
+          "퀴즈 버전별 필터링 가능",
+          "만점자만 조회 옵션",
+          "completion_time: 초 단위",
+          "최신순 정렬"
+        ]
       },
       {
         "id": "admin-quiz-participant-delete",
         "name": "퀴즈 참여자 삭제",
         "method": "DELETE",
         "endpoint": "/api/admin/online-festival/quiz-participants/[id]",
-        "description": "퀴즈 참여자 삭제",
+        "description": "특정 퀴즈 참여자를 삭제합니다. 관리자 권한이 필요합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false,
+          "path_parameters": {
+            "id": {
+              "type": "string",
+              "required": true,
+              "description": "퀴즈 참여자 ID"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "삭제 성공",
+            "body": {
+              "success": true,
+              "message": "퀴즈 참여자가 삭제되었습니다."
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "404": {
+            "description": "퀴즈 참여자를 찾을 수 없음",
+            "body": {
+              "success": false,
+              "error": "존재하지 않는 퀴즈 참여자입니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "퀴즈 참여자 삭제 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "존재하지 않는 ID 시 404 반환",
+          "삭제된 데이터 복구 불가"
+        ]
       },
       {
-        "id": "admin-writings-list",
-        "name": "글쓰기 목록",
+        "id": "admin-quiz-participants-export",
+        "name": "퀴즈 참여자 엑셀 내보내기",
         "method": "GET",
-        "endpoint": "/api/admin/online-festival/writings",
-        "description": "글쓰기 목록 조회 (관리자)",
+        "endpoint": "/api/admin/online-festival/quiz-participants/export",
+        "description": "퀴즈 참여자 목록을 엑셀 파일로 내보냅니다. 목록, 전체통계, 일별통계 시트를 포함합니다",
         "authentication": true,
-        "adminOnly": true
-      },
-      {
-        "id": "admin-writing-delete",
-        "name": "글쓰기 삭제",
-        "method": "DELETE",
-        "endpoint": "/api/admin/online-festival/writings/[id]",
-        "description": "글쓰기 삭제",
-        "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "엑셀 파일 생성 및 다운로드 성공",
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "headers": {
+              "Content-Disposition": "attachment; filename*=UTF-8''퀴즈참여자목록_YYYYMMDD.xlsx",
+              "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              "Content-Length": "number"
+            },
+            "body": "Binary (Excel file)"
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "엑셀 다운로드 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "3개 시트 포함: 퀴즈참여자목록, 전체통계, 일별통계",
+          "통계 항목: 총 참여자수, 만점자수, 만점 비율, 평균 완료시간",
+          "완료시간은 '분 초' 형식으로 변환",
+          "파일명 형식: 퀴즈참여자목록_YYYYMMDD.xlsx"
+        ]
       },
       {
         "id": "admin-support-comments-list",
-        "name": "응원메시지 목록",
+        "name": "응원댓글 목록 조회",
         "method": "GET",
         "endpoint": "/api/admin/online-festival/support-comments",
-        "description": "응원 메시지 목록 조회 (관리자)",
+        "description": "응원댓글 목록을 조회합니다. 페이지네이션과 검색을 지원합니다. 관리자 권한이 필요합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false,
+          "query": {
+            "page": {
+              "type": "number",
+              "required": false,
+              "description": "페이지 번호 (기본값: 1)",
+              "example": 1
+            },
+            "limit": {
+              "type": "number",
+              "required": false,
+              "description": "페이지당 항목 수 (기본값: 20)",
+              "example": 20
+            },
+            "search": {
+              "type": "string",
+              "required": false,
+              "description": "검색어 (이름, 전화번호 또는 댓글 내용)",
+              "example": "응원합니다"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "목록 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "items": [
+                  {
+                    "id": "string",
+                    "user_id": "string",
+                    "name": "string",
+                    "phone": "string",
+                    "message": "string",
+                    "likes": "number",
+                    "created_at": "datetime"
+                  }
+                ],
+                "total": "number",
+                "page": "number",
+                "totalPages": "number"
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "응원댓글 목록 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "페이지네이션 지원 (기본 20개씩)",
+          "이름/전화번호/댓글내용 검색 가능",
+          "최신순 정렬"
+        ]
       },
       {
         "id": "admin-support-comment-delete",
-        "name": "응원메시지 삭제",
+        "name": "응원댓글 삭제",
         "method": "DELETE",
         "endpoint": "/api/admin/online-festival/support-comments/[id]",
-        "description": "응원 메시지 삭제",
+        "description": "특정 응원댓글을 삭제합니다. 관련 좋아요도 함께 삭제됩니다. 관리자 권한이 필요합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false,
+          "path_parameters": {
+            "id": {
+              "type": "string",
+              "required": true,
+              "description": "응원댓글 ID"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "삭제 성공",
+            "body": {
+              "success": true,
+              "message": "응원댓글이 삭제되었습니다."
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "404": {
+            "description": "응원댓글을 찾을 수 없음",
+            "body": {
+              "success": false,
+              "error": "존재하지 않는 응원댓글입니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "응원댓글 삭제 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "관련 좋아요 데이터 먼저 삭제",
+          "존재하지 않는 ID 시 404 반환",
+          "삭제된 데이터 복구 불가"
+        ]
       },
       {
         "id": "admin-support-comments-export",
-        "name": "응원메시지 엑셀 다운로드",
+        "name": "응원댓글 엑셀 내보내기",
         "method": "GET",
         "endpoint": "/api/admin/online-festival/support-comments/export",
-        "description": "응원 메시지 엑셀 파일 다운로드",
+        "description": "응원댓글 목록을 엑셀 파일로 내보냅니다. 전체댓글, 참여자별요약, 통계, 일별통계 시트를 포함합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "엑셀 파일 생성 및 다운로드 성공",
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "headers": {
+              "Content-Disposition": "attachment; filename*=UTF-8''응원댓글목록_YYYYMMDD.xlsx",
+              "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              "Content-Length": "number"
+            },
+            "body": "Binary (Excel file)"
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "엑셀 다운로드 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "4개 시트 포함: 전체댓글목록, 참여자별요약, 전체통계, 일별통계",
+          "참여자별요약: 사용자당 댓글수, 좋아요수, 댓글요약 포함",
+          "통계: 총 댓글수, 참여자수, 좋아요수, 평균값",
+          "파일명 형식: 응원댓글목록_YYYYMMDD.xlsx"
+        ]
       },
       {
-        "id": "admin-support-comments-participants",
-        "name": "응원메시지 참여자 목록",
+        "id": "admin-support-comments-participants-list",
+        "name": "응원댓글 참여자 목록 조회",
         "method": "GET",
         "endpoint": "/api/admin/online-festival/support-comments/participants",
-        "description": "응원 메시지 참여자 목록 조회 (중복 제거)",
+        "description": "응원댓글 참여자 목록을 조회합니다. 중복 제거된 사용자별로 댓글 수와 최근 댓글 일시를 포함합니다. 관리자 권한이 필요합니다",
         "authentication": true,
-        "adminOnly": true
+        "request": {
+          "required": false,
+          "query": {
+            "page": {
+              "type": "number",
+              "required": false,
+              "description": "페이지 번호 (기본값: 1)",
+              "example": 1
+            },
+            "limit": {
+              "type": "number",
+              "required": false,
+              "description": "페이지당 항목 수 (기본값: 20)",
+              "example": 20
+            },
+            "search": {
+              "type": "string",
+              "required": false,
+              "description": "검색어 (이름 또는 전화번호)",
+              "example": "홍길동"
+            }
+          }
+        },
+        "response": {
+          "200": {
+            "description": "목록 조회 성공",
+            "body": {
+              "success": true,
+              "data": {
+                "items": [
+                  {
+                    "user_id": "string",
+                    "name": "string",
+                    "phone": "string",
+                    "comment_count": "number",
+                    "latest_comment_at": "datetime"
+                  }
+                ],
+                "total": "number",
+                "page": "number",
+                "totalPages": "number"
+              }
+            }
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "응원댓글 참여자 목록 조회 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "중복 제거된 참여자 목록",
+          "사용자별 댓글수 집계",
+          "최근 댓글 일시 기준 정렬"
+        ]
+      },
+      {
+        "id": "admin-support-comments-participants-export",
+        "name": "응원댓글 참여자 엑셀 내보내기",
+        "method": "GET",
+        "endpoint": "/api/admin/online-festival/support-comments/participants/export",
+        "description": "응원댓글 참여자 목록을 엑셀 파일로 내보냅니다. 참여자목록, 통계, 활동도별통계 시트를 포함합니다",
+        "authentication": true,
+        "request": {
+          "required": false
+        },
+        "response": {
+          "200": {
+            "description": "엑셀 파일 생성 및 다운로드 성공",
+            "content_type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+            "headers": {
+              "Content-Disposition": "attachment; filename*=UTF-8''응원댓글참여자목록_YYYYMMDD.xlsx",
+              "Content-Type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+              "Content-Length": "number"
+            },
+            "body": "Binary (Excel file)"
+          },
+          "403": {
+            "description": "권한 부족",
+            "body": {
+              "success": false,
+              "error": "관리자 권한이 필요합니다."
+            }
+          },
+          "500": {
+            "description": "서버 내부 오류",
+            "body": {
+              "success": false,
+              "error": "엑셀 다운로드 중 오류가 발생했습니다."
+            }
+          }
+        },
+        "notes": [
+          "관리자 권한 필수",
+          "3개 시트 포함: 응원댓글참여자목록, 전체통계, 활동도별통계",
+          "중복 제거된 참여자별 통계",
+          "활동도 분류: 매우활발(10개이상), 활발(5-9개), 보통(2-4개), 적음(1개)",
+          "파일명 형식: 응원댓글참여자목록_YYYYMMDD.xlsx"
+        ]
       }
     ]
   }
