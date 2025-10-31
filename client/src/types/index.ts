@@ -1,4 +1,15 @@
 // ============================================
+// 서버 응답 래퍼 타입 (실제 API 통신용)
+// ============================================
+export interface ServerResponse<T = unknown> {
+  success: boolean
+  data?: T
+  error?: string
+  message?: string
+  timestamp?: string
+}
+
+// ============================================
 // 페이지 구조 타입
 // ============================================
 export interface PageNode {
@@ -45,6 +56,13 @@ export interface ApiResponseExample {
   body: any
 }
 
+// API 문서 응답 타입 (API 스펙 문서화용)
+export interface ApiDocResponse {
+  description: string
+  body?: any
+  examples?: ApiResponseExample[]
+}
+
 export interface ApiInfo {
   id: string
   name: string
@@ -55,11 +73,10 @@ export interface ApiInfo {
   adminOnly?: boolean
   note?: string
   request?: ApiRequest
-  response?: Record<string, ApiResponse>
+  response?: Record<string, ApiDocResponse>
   notes?: string[]
   relatedEndpoints?: string[]
 }
-
 
 export interface ApiCategory {
   title: string
@@ -89,15 +106,6 @@ export interface StatsData {
     tables: number
     description: string
   }
-}
-
-// ============================================
-// API 응답 타입
-// ============================================
-export interface ApiResponse {
-  description: string
-  body?: any
-  examples?: ApiResponseExample[]
 }
 
 // ============================================
@@ -139,7 +147,7 @@ export interface TableRelationship {
   columns: string[]
 }
 
-// 테이블 정보
+// 테이블 정보 (서버에서 받는 데이터)
 export interface TableInfo {
   description: string
   category: TableCategory
@@ -148,6 +156,7 @@ export interface TableInfo {
   relationships: string[]
   columnCount: number
   sampleData?: Record<string, any>[]
+  foreignKeys?: string[]
 }
 
 // 전체 테이블 데이터
@@ -155,16 +164,10 @@ export interface TablesData {
   [tableName: string]: TableInfo
 }
 
-// React Flow용 테이블 노드 데이터
-export interface TableNodeData {
+// React Flow용 테이블 노드 데이터 (클라이언트에서 사용)
+export interface TableNodeData extends Omit<TableInfo, 'foreignKeys'> {
   tableName: string
   displayName: string
-  description: string
-  category: TableCategory
-  columns: ColumnInfo[]
-  primaryKeys: string[]
   foreignKeys: string[]
-  relationships: string[]
-  columnCount: number
   sampleData?: Record<string, any>[]
 }
