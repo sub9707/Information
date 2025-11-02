@@ -63,15 +63,14 @@ const TableNode = memo(({ data, selected }: TableNodeProps) => {
     setShowModal(false)
   }
 
-
-  // 샘플 데이터 렌더링
+  // 샘플 데이터 렌더링 - 모든 컬럼 표시
   const renderSampleData = () => {
     if (!sampleData || sampleData.length === 0) {
       return <p className="no-data">샘플 데이터가 없습니다</p>
     }
 
-    // 표시할 컬럼 선택 (최대 8개)
-    const displayColumns = columns.slice(0, 8)
+    // 모든 컬럼 표시
+    const displayColumns = columns
     
     return (
       <div className="sample-data-container">
@@ -102,9 +101,6 @@ const TableNode = memo(({ data, selected }: TableNodeProps) => {
         </div>
         {sampleData.length > 5 && (
           <p className="sample-data-note">... {sampleData.length - 5}개의 행이 더 있습니다</p>
-        )}
-        {columns.length > 8 && (
-          <p className="sample-data-note">{columns.length - 8}개의 컬럼이 더 있습니다</p>
         )}
       </div>
     )

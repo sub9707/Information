@@ -4,8 +4,8 @@ import { TableCategory, CategoryInfo } from '@/types'
 export const CATEGORY_INFO: Record<TableCategory, CategoryInfo> = {
   core: {
     key: 'core',
-    label: '핵심',
-    description: '사용자 및 인증 관련 핵심 테이블',
+    label: '인증',
+    description: '사용자 및 인증 관련 테이블',
     color: '#3b82f6',
     icon: '👤'
   },

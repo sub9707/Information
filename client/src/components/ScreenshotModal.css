@@ -1,0 +1,206 @@
+/* ============================================
+   스크린샷 모달 오버레이
+============================================ */
+.screenshot-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0, 0, 0, 0.85);
+  z-index: 10000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  animation: overlayFadeIn 0.2s ease-out;
+  backdrop-filter: blur(8px);
+  cursor: pointer;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* ============================================
+   모달 컨테이너
+============================================ */
+.screenshot-modal-container {
+  background-color: var(--color-bg);
+  border-radius: var(--radius-lg);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+  width: 100%;
+  max-width: 1400px;
+  max-height: 90vh;
+  display: flex;
+  flex-direction: column;
+  animation: modalSlideIn 0.3s ease-out;
+  overflow: hidden;
+  cursor: default;
+}
+
+@keyframes modalSlideIn {
+  from {
+    opacity: 0;
+    transform: scale(0.95) translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ============================================
+   모달 헤더
+============================================ */
+.screenshot-modal-header {
+  padding: 1.5rem 2rem;
+  border-bottom: 2px solid var(--color-border);
+  background-color: var(--color-bg-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-shrink: 0;
+}
+
+.screenshot-modal-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.375rem;
+}
+
+.screenshot-modal-title {
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--color-text);
+  margin: 0;
+  line-height: 1.3;
+}
+
+.screenshot-modal-route {
+  font-size: 0.9375rem;
+  color: var(--color-primary);
+  font-family: 'Courier New', monospace;
+  font-weight: 600;
+}
+
+.screenshot-modal-close {
+  width: 2.5rem;
+  height: 2.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  border: none;
+  color: var(--color-text-tertiary);
+  cursor: pointer;
+  border-radius: 50%;
+  transition: all var(--transition-fast);
+  flex-shrink: 0;
+  font-size: 1.5rem;
+}
+
+.screenshot-modal-close:hover {
+  background-color: var(--color-bg-tertiary);
+  color: var(--color-text);
+  transform: rotate(90deg);
+}
+
+/* ============================================
+   모달 바디
+============================================ */
+.screenshot-modal-body {
+  padding: 2rem;
+  overflow: auto;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: var(--color-bg-secondary);
+}
+
+.screenshot-modal-image {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  object-fit: contain;
+  animation: imageZoomIn 0.3s ease-out;
+}
+
+@keyframes imageZoomIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+/* ============================================
+   반응형 처리
+============================================ */
+@media (max-width: 768px) {
+  .screenshot-modal-overlay {
+    padding: 1rem;
+  }
+
+  .screenshot-modal-container {
+    max-width: 100%;
+    max-height: 95vh;
+  }
+
+  .screenshot-modal-header {
+    padding: 1.25rem 1.5rem;
+  }
+
+  .screenshot-modal-title {
+    font-size: 1.25rem;
+  }
+
+  .screenshot-modal-route {
+    font-size: 0.875rem;
+  }
+
+  .screenshot-modal-body {
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .screenshot-modal-overlay {
+    padding: 0.5rem;
+  }
+
+  .screenshot-modal-header {
+    padding: 1rem 1.25rem;
+  }
+
+  .screenshot-modal-title {
+    font-size: 1.125rem;
+  }
+
+  .screenshot-modal-route {
+    font-size: 0.8125rem;
+  }
+
+  .screenshot-modal-close {
+    width: 2rem;
+    height: 2rem;
+    font-size: 1.25rem;
+  }
+
+  .screenshot-modal-body {
+    padding: 1rem;
+  }
+}

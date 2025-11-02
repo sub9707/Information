@@ -81,7 +81,7 @@
     "columns": [
       { "name": "id", "type": "varchar(36)", "nullable": false },
       { "name": "user_id", "type": "varchar(36)", "nullable": false },
-      { "name": "provider", "type": "enum('naver','kakao','google')", "nullable": false },
+      { "name": "provider", "type": "enum('naver')", "nullable": false },
       { "name": "provider_id", "type": "varchar(100)", "nullable": false },
       { "name": "provider_email", "type": "varchar(100)", "nullable": true },
       { "name": "provider_name", "type": "varchar(50)", "nullable": true },
@@ -576,112 +576,6 @@
         "comment_id": "comment-001",
         "user_id": "user-002",
         "created_at": "2025-02-15 14:05:00"
-      }
-    ]
-  },
-  "page_analytics": {
-    "description": "페이지 방문 분석",
-    "category": "analytics",
-    "columns": [
-      { "name": "id", "type": "varchar(36)", "nullable": false },
-      { "name": "page_path", "type": "varchar(255)", "nullable": false, "comment": "페이지 경로" },
-      { "name": "page_title", "type": "varchar(255)", "nullable": true, "comment": "페이지 제목" },
-      { "name": "visitor_id", "type": "varchar(64)", "nullable": false, "comment": "방문자 식별자" },
-      { "name": "session_id", "type": "varchar(64)", "nullable": false, "comment": "세션 식별자" },
-      { "name": "ip_address", "type": "varchar(45)", "nullable": true, "comment": "IP 주소" },
-      { "name": "user_agent", "type": "text", "nullable": true, "comment": "브라우저 정보" },
-      { "name": "referrer", "type": "varchar(500)", "nullable": true, "comment": "리퍼러" },
-      { "name": "screen_resolution", "type": "varchar(20)", "nullable": true, "comment": "화면 해상도" },
-      { "name": "device_type", "type": "enum('desktop','mobile','tablet')", "nullable": true },
-      { "name": "browser_name", "type": "varchar(50)", "nullable": true },
-      { "name": "os_name", "type": "varchar(50)", "nullable": true },
-      { "name": "visit_duration", "type": "int", "nullable": true, "comment": "체류시간(초)" },
-      { "name": "is_bounce", "type": "tinyint(1)", "nullable": true, "comment": "바운스 여부" },
-      { "name": "created_at", "type": "timestamp", "nullable": true },
-      { "name": "updated_at", "type": "timestamp", "nullable": true }
-    ],
-    "primaryKeys": ["id"],
-    "relationships": [],
-    "columnCount": 16,
-    "sampleData": [
-      {
-        "id": "pa-001",
-        "page_path": "/main",
-        "page_title": "메인 페이지",
-        "visitor_id": "vis-111",
-        "session_id": "sess-aaa",
-        "ip_address": "10.0.0.1",
-        "device_type": "desktop",
-        "visit_duration": 60,
-        "is_bounce": 0,
-        "created_at": "2025-04-10 10:00:00"
-      }
-    ]
-  },
-  "daily_page_stats": {
-    "description": "일별 페이지 통계",
-    "category": "analytics",
-    "columns": [
-      { "name": "id", "type": "varchar(36)", "nullable": false },
-      { "name": "page_path", "type": "varchar(255)", "nullable": false },
-      { "name": "date", "type": "date", "nullable": false },
-      { "name": "total_views", "type": "int", "nullable": true },
-      { "name": "unique_visitors", "type": "int", "nullable": true },
-      { "name": "avg_duration", "type": "decimal(8,2)", "nullable": true },
-      { "name": "bounce_rate", "type": "decimal(5,2)", "nullable": true },
-      { "name": "desktop_count", "type": "int", "nullable": true },
-      { "name": "mobile_count", "type": "int", "nullable": true },
-      { "name": "tablet_count", "type": "int", "nullable": true },
-      { "name": "created_at", "type": "timestamp", "nullable": true },
-      { "name": "updated_at", "type": "timestamp", "nullable": true }
-    ],
-    "primaryKeys": ["id"],
-    "relationships": [],
-    "columnCount": 12,
-    "sampleData": [
-      {
-        "id": "dps-001",
-        "page_path": "/main",
-        "date": "2025-04-10",
-        "total_views": 500,
-        "unique_visitors": 150,
-        "avg_duration": 45.50,
-        "bounce_rate": 30.25,
-        "desktop_count": 300,
-        "mobile_count": 180,
-        "tablet_count": 20,
-        "created_at": "2025-04-11 00:00:00"
-      }
-    ]
-  },
-  "phone_verifications": {
-    "description": "전화번호 인증",
-    "category": "security",
-    "columns": [
-      { "name": "id", "type": "varchar(36)", "nullable": false },
-      { "name": "phone", "type": "varchar(15)", "nullable": false },
-      { "name": "code", "type": "varchar(6)", "nullable": false },
-      { "name": "ip_address", "type": "varchar(45)", "nullable": false },
-      { "name": "user_agent", "type": "text", "nullable": true },
-      { "name": "attempt_count", "type": "int", "nullable": false },
-      { "name": "verified", "type": "tinyint(1)", "nullable": false },
-      { "name": "expires_at", "type": "timestamp", "nullable": false },
-      { "name": "created_at", "type": "timestamp", "nullable": true },
-      { "name": "updated_at", "type": "timestamp", "nullable": true }
-    ],
-    "primaryKeys": ["id"],
-    "relationships": [],
-    "columnCount": 10,
-    "sampleData": [
-      {
-        "id": "pv-001",
-        "phone": "01011112222",
-        "code": "123456",
-        "ip_address": "1.2.3.4",
-        "attempt_count": 1,
-        "verified": 0,
-        "expires_at": "2025-04-21 13:40:00",
-        "created_at": "2025-04-21 13:35:00"
       }
     ]
   },
