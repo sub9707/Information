@@ -31,7 +31,7 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
     setShowTooltip(true)
     setImageLoaded(false)
     setIsPositioned(false) // 초기화
-    
+
     if (nodeRef) {
       const rect = nodeRef.getBoundingClientRect()
       setTooltipPosition({
@@ -58,6 +58,11 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
     window.open(url, '_blank', 'noopener,noreferrer')
   }
 
+  const handleRightClick = (e: React.MouseEvent) => {
+    e.preventDefault()
+    alert('우클릭 메뉴는 아직 지원되지 않습니다.')
+  }
+
   return (
     <>
       <Handle type="target" position={Position.Top} />
@@ -67,6 +72,7 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
         onMouseEnter={handleMouseEnter}
         onMouseLeave={handleMouseLeave}
         onClick={handleClick}
+        onContextMenu={handleRightClick}
       >
         <div className="page-node-content">
           <div className="page-node-title">{data.title}</div>
@@ -76,7 +82,7 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
       <Handle type="source" position={Position.Bottom} />
 
       {showTooltip && tooltipPosition && createPortal(
-        <div 
+        <div
           className={`page-node-tooltip-portal ${isPositioned ? 'positioned' : ''}`}
           style={{
             top: `${tooltipPosition.top}px`,
@@ -89,25 +95,27 @@ const PageNode: React.FC<PageNodeProps> = ({ data }) => {
           </div>
 
           <div className="tooltip-body">
-            <div className="tooltip-screenshot">
-              {!imageLoaded && (
-                <div className="screenshot-skeleton">
-                  <div className="skeleton-shimmer"></div>
-                </div>
-              )}
-              
-              <img
-                src={data.screenshot}
-                alt={data.title}
-                className={`screenshot-image ${imageLoaded ? 'loaded' : ''}`}
-                onLoad={() => setImageLoaded(true)}
-                onError={() => setImageLoaded(true)}
-              />
-            </div>
+            {data.screenshot ? (
+              <div className="tooltip-screenshot">
+                {!imageLoaded && (
+                  <div className="screenshot-skeleton">
+                    <div className="skeleton-shimmer"></div>
+                  </div>
+                )}
+                ?
+                <img
+                  src={data.screenshot}
+                  alt={data.title}
+                  className={`screenshot-image ${imageLoaded ? 'loaded' : ''}`}
+                  onLoad={() => setImageLoaded(true)}
+                  onError={() => setImageLoaded(true)}
+                />
+              </div>) : null
+            }
 
             <div className="tooltip-content">
               <p className="tooltip-description">{data.description}</p>
-              
+
               {data.features && data.features.length > 0 && (
                 <div className="tooltip-features">
                   <h5 className="tooltip-features-title">주요 기능</h5>

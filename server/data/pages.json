@@ -17,7 +17,7 @@
         "title": "축제 소개",
         "route": "/about",
         "description": "모두하나대축제의 취지와 목표",
-        "screenshot": "https://picsum.photos/seed/about/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/about.png",
         "features": [
           "축제 소개",
           "개최 목적",
@@ -30,7 +30,7 @@
         "title": "기관 소개",
         "route": "/organization",
         "description": "주최 및 후원 기관 소개",
-        "screenshot": "https://picsum.photos/seed/organization/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/organization.png",
         "features": [
           "주최 기관",
           "후원 기관",
@@ -42,7 +42,7 @@
         "title": "온라인 축제",
         "route": "/online-festival",
         "description": "온라인으로 참여하는 축제 이벤트",
-        "screenshot": "https://picsum.photos/seed/online-festival/800/600",
+        "screenshot": null,
         "features": [
           "퀴즈 이벤트",
           "응원 메시지",
@@ -52,9 +52,9 @@
           {
             "id": "online-quiz",
             "title": "퀴즈 이벤트",
-            "route": "/online-festival/quiz",
+            "route": "/(quiz)",
             "description": "퀴즈 참여 페이지",
-            "screenshot": "https://picsum.photos/seed/quiz/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/quiz.png",
             "features": [
               "퀴즈 문제 풀기",
               "점수 확인",
@@ -64,9 +64,9 @@
           {
             "id": "online-support",
             "title": "응원 메시지",
-            "route": "/online-festival/support",
+            "route": "/(support-comments)",
             "description": "응원 메시지 작성 및 조회",
-            "screenshot": "https://picsum.photos/seed/support/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/comments.png",
             "features": [
               "메시지 작성",
               "좋아요",
@@ -76,9 +76,21 @@
           {
             "id": "online-writing",
             "title": "글쓰기",
-            "route": "/online-festival/writing",
+            "route": "/(family-writing)",
             "description": "주제별 글쓰기 이벤트",
-            "screenshot": "https://picsum.photos/seed/writing/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/writing.png",
+            "features": [
+              "글 작성",
+              "추천 글",
+              "좋아요 기능"
+            ]
+          },
+          {
+            "id": "random-roulette",
+            "title": "랜덤 룰렛",
+            "route": "/(random-roulette)",
+            "description": "랜덤 룰렛 이벤트",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/random.png",
             "features": [
               "글 작성",
               "추천 글",
@@ -92,7 +104,7 @@
         "title": "행사 프로그램",
         "route": "/programs",
         "description": "축제 프로그램 일정 및 안내",
-        "screenshot": "https://picsum.photos/seed/programs/800/600",
+        "screenshot": null,
         "features": [
           "프로그램 목록",
           "일정 안내",
@@ -102,10 +114,22 @@
         "children": [
           {
             "id": "program-detail",
-            "title": "프로그램 상세",
-            "route": "/programs/:id",
+            "title": "행사 일정",
+            "route": "/(program-schedule)",
+            "description": "행사 일정 포스터",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/program_schedule.png",
+            "features": [
+              "상세 설명",
+              "일정",
+              "참가 방법"
+            ]
+          },
+          {
+            "id": "program-detail",
+            "title": "전체 행사 안내",
+            "route": "/(programs-list)",
             "description": "개별 프로그램 상세 정보",
-            "screenshot": "https://picsum.photos/seed/program-detail/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/programs.png",
             "features": [
               "상세 설명",
               "일정",
@@ -119,7 +143,7 @@
         "title": "공지/소식",
         "route": "/news",
         "description": "축제 소식 및 공지사항",
-        "screenshot": "https://picsum.photos/seed/news/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/news.png",
         "features": [
           "공지사항 목록",
           "카테고리 필터",
@@ -131,7 +155,7 @@
             "title": "소식 상세",
             "route": "/news/:id",
             "description": "개별 소식 상세 페이지",
-            "screenshot": "https://picsum.photos/seed/news-detail/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/news-detail.png",
             "features": [
               "본문 내용",
               "첨부파일",
@@ -145,7 +169,7 @@
         "title": "오시는 길",
         "route": "/directions",
         "description": "축제 장소 및 교통 안내",
-        "screenshot": "https://picsum.photos/seed/directions/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/directions.png",
         "features": [
           "지도",
           "대중교통",
@@ -158,7 +182,7 @@
         "title": "함께하는 기관",
         "route": "/partners",
         "description": "후원 및 협력 기관 소개",
-        "screenshot": "https://picsum.photos/seed/partners/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/partners.png",
         "features": [
           "후원 기관 목록",
           "로고",
@@ -170,7 +194,7 @@
         "title": "사전참가 신청",
         "route": "/registration",
         "description": "사전 참가 신청 페이지",
-        "screenshot": "https://picsum.photos/seed/registration/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/registration.png",
         "features": [
           "신청 폼",
           "참가 유형 선택",
@@ -182,7 +206,7 @@
             "title": "신청 완료",
             "route": "/registration/success",
             "description": "신청 완료 확인 페이지",
-            "screenshot": "https://picsum.photos/seed/reg-success/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/registration-success.png",
             "features": [
               "신청번호",
               "신청 내역",
@@ -194,15 +218,16 @@
       {
         "id": "auth",
         "title": "인증",
-        "route": "/auth",
+        "route": "/(auth)",
         "description": "로그인 및 회원가입 관련 페이지",
+        "screenshot": null,
         "children": [
           {
             "id": "login",
             "title": "로그인",
             "route": "/login",
             "description": "로그인 및 회원가입",
-            "screenshot": "https://picsum.photos/seed/login/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/login.png",
             "features": [
               "전화번호 로그인",
               "소셜 로그인 (네이버, 카카오)",
@@ -214,22 +239,11 @@
             "title": "회원가입",
             "route": "/register",
             "description": "신규 회원가입",
-            "screenshot": "https://picsum.photos/seed/register/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/register.png",
             "features": [
               "회원정보 입력",
               "전화번호 인증",
               "약관 동의"
-            ]
-          },
-          {
-            "id": "forgot-password",
-            "title": "비밀번호 찾기",
-            "route": "/forgot-password",
-            "description": "비밀번호 재설정",
-            "screenshot": "https://picsum.photos/seed/forgot-password/800/600",
-            "features": [
-              "전화번호 인증",
-              "비밀번호 재설정"
             ]
           }
         ]
@@ -239,7 +253,7 @@
         "title": "마이페이지",
         "route": "/my-page",
         "description": "사용자 정보 관리",
-        "screenshot": "https://picsum.photos/seed/mypage/800/600",
+        "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/my-page.png",
         "features": [
           "내 정보",
           "신청 내역",
@@ -247,23 +261,11 @@
         ],
         "children": [
           {
-            "id": "my-registrations",
-            "title": "내 신청 내역",
-            "route": "/my-page/registrations",
-            "description": "사전참가 신청 내역 조회",
-            "screenshot": "https://picsum.photos/seed/my-reg/800/600",
-            "features": [
-              "신청 목록",
-              "상태 확인",
-              "취소 기능"
-            ]
-          },
-          {
             "id": "change-password",
             "title": "비밀번호 변경",
             "route": "/my-page/change-password",
             "description": "비밀번호 변경 페이지",
-            "screenshot": "https://picsum.photos/seed/change-pw/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/reset-password.png",
             "features": [
               "현재 비밀번호 확인",
               "새 비밀번호 입력",
@@ -271,23 +273,11 @@
             ]
           },
           {
-            "id": "edit-profile",
-            "title": "회원정보 수정",
-            "route": "/my-page/edit-profile",
-            "description": "회원정보 수정 페이지",
-            "screenshot": "https://picsum.photos/seed/edit-profile/800/600",
-            "features": [
-              "이름, 주소 수정",
-              "프로필 사진 변경",
-              "정보 업데이트"
-            ]
-          },
-          {
             "id": "delete-account",
             "title": "회원탈퇴",
             "route": "/my-page/delete-account",
             "description": "회원 탈퇴 페이지",
-            "screenshot": "https://picsum.photos/seed/delete/800/600",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/delete-user.png",
             "features": [
               "탈퇴 사유",
               "확인 절차",
@@ -305,6 +295,7 @@
             "id": "not-found",
             "title": "404 페이지",
             "route": "/not-found",
+            "screenshot": "http://subdevpi.mywire.org:3000/file/modoohana/images/notfound.png",
             "description": "페이지를 찾을 수 없음",
             "features": [
               "404 에러 표시",

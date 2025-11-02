@@ -41,7 +41,7 @@
 .page-node-tooltip-portal {
   position: fixed;
   transform: translateY(-50%);
-  width: 600px;
+  width: 500px;
   max-width: 90vw;
   background-color: var(--color-bg);
   border: 1px solid var(--color-border);
@@ -116,12 +116,15 @@
 /* 왼쪽: 스크린샷 (고정 크기) */
 .tooltip-screenshot {
   position: relative;
-  width: 240px;
-  height: 180px;
+  width: 100%;           
+  aspect-ratio: 16 / 9;
   border-radius: var(--radius-md);
   overflow: hidden;
   border: 1px solid var(--color-border-light);
   background-color: var(--color-bg-secondary);
+  background-size: cover;   
+  background-position: center;
+  background-repeat: no-repeat;
 }
 
 /* 스켈레톤 로딩 */
